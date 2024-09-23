@@ -14,5 +14,6 @@ Algunos enlaces de interés:
 1. [Pagina oficial de git](https://git-scm.com/)
 2. [Pagina oficial de doker](https://www.docker.com/)
 
-***
+> Un país, una civilización se puede juzgar por la forma en que trata a sus animales.  — Mahatma Gandhi
+
 Sitio web realizado por Amaro Del Águila Salas
