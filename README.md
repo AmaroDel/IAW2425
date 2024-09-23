@@ -1,8 +1,7 @@
 # IAW2425
 ## Introducción del entorno de trabajo
-***
 ---
-___
+- - -
 En este tema vamos a instalar los programas que nos hacen falta para el resto del curso; estos son:
 - Docker
 - Git
