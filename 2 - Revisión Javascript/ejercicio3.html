@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <style>
+        span {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <label for="">Nombre</label><input type="text" id="nombre" required><span class="error" id="campo1"></span><br>
+    <label for="">Apellido</label><input type="text" id="apellido" required><span class="error" id="campo2"></span><br>
+    <label for="">Correo Electronico</label><input type="text" id="correo" required><span class="error"
+        id="campo3"></span><br>
+    <label for="">Dirección</label><input type="text" id="direccion"><span class="error" id="campo4"></span><br>
+    <label for="">Ciudad</label><input type="text" id="ciudad"><span class="error" id="campo5"></span><br>
+    <label for="">Telefono</label><input type="text" id="telefono"><span class="error" id="campo6"></span><br>
+    <label for="">DNI</label><input type="text" id="dni" required onkeyup="sin_espacio(dni)"><span class="error"
+        id="campo7"></span><br>
+    <label for="">PIN</label><input type="password" id="pin" required onkeyup="sin_espacio(pin)"><span class="error"
+        id="campo8"></span><br>
+    <label for="">Repita el PIN</label><input type="password" id="pin2" required onkeyup="sin_espacio(pin2)"><span
+        class="error" id="campo9"></span>
+    <button id="enviar" onclick="validar()">Enviar</button>
+    <p id="respuesta"></p>
+
+    <script>
+        function validar() {
+            document.getElementById("respuesta").innerHTML = ""
+            let nombre = document.getElementById("nombre").value
+            let apellido = document.getElementById("apellido").value
+            let correo = document.getElementById("correo").value
+            let telefono = document.getElementById("correo").value
+            let dni = document.getElementById("dni").value
+            let pin = document.getElementById("pin").value
+            let pin2 = document.getElementById("pin2").value
+
+            let n = nombre.substr(0, 2);
+            let a = apellido.substr(0, 2);
+            let t = telefono.substr(-3);
+            let usuario = (n + a + t).toLowerCase(); // Convertir a minúsculas
+
+           let hayErrores = false;
+
+
+
+            if (nombre == "") {
+                document.getElementById("campo1").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            } else {
+                document.getElementById("campo1").innerHTML = ""
+            }
+
+            if (apellido == "") {
+                document.getElementById("campo2").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            } else {
+                document.getElementById("campo2").innerHTML = ""
+            }
+
+            if (correo == "") {
+                document.getElementById("campo3").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            } else {
+                document.getElementById("campo3").innerHTML = ""
+            }
+
+            if (dni == "") {
+                document.getElementById("campo7").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            }
+            else if (dni.length != 9) {
+                document.getElementById("campo7").innerHTML = "12345678X"
+                hayErrores = true;
+            }
+            else {
+                document.getElementById("campo7").innerHTML = ""
+                validarDNI()
+            }
+
+            if (pin == "") {
+                document.getElementById("campo8").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            } else if (isNaN(pin)) {
+                document.getElementById("campo8").innerHTML = "Todos los caracteres deben ser numeros"
+                hayErrores = true;
+            }
+            else if (pin.length < 8) {
+                document.getElementById("campo8").innerHTML = "Mínimo 8 digitos"
+                hayErrores = true;
+            } else if (pin != pin2) {
+                document.getElementById("campo8").innerHTML = "Los pin no son iguales"
+                hayErrores = true;
+            }
+            else {
+                document.getElementById("campo8").innerHTML = ""
+            }
+
+
+
+            if (pin2 == "") {
+                document.getElementById("campo9").innerHTML = "Rellene este campo"
+                hayErrores = true;
+            } else if (isNaN(pin2)) {
+                document.getElementById("campo9").innerHTML = "Todos los caracteres deben ser numeros"
+                hayErrores = true;
+            }
+            else if (pin2.length < 8) {
+                document.getElementById("campo9").innerHTML = "Mínimo 8 digitos"
+                hayErrores = true;
+            } else if (pin != pin2) {
+                document.getElementById("campo9").innerHTML = "Los pin no son iguales"
+                hayErrores = true;
+            }
+            else {
+                document.getElementById("campo9").innerHTML = ""
+            }
+
+            if (!hayErrores) {
+                document.getElementById("respuesta").innerHTML = "Usuario: " + usuario
+            }
+
+        }
+
+        function validarDNI() {
+
+            let dni = document.getElementById("dni").value
+            let letra = dni[8]
+
+            //Función calcula letras cogida de otro ejercicio
+            let letras = ["T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"];
+            let numero = parseInt(document.getElementById("dni").value);
+            let resto = numero % 23; //Resto de la división entre 23
+            letras[resto];
+            //FIN
+
+            if (letra != letras[resto]) {
+                document.getElementById("campo7").innerHTML = "DNI no valido"
+            }
+        }
+
+        function sin_espacio(elemento) {
+            elemento.value = elemento.value.replace(/ /g, '')
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
