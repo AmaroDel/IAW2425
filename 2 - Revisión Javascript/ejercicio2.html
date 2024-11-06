@@ -9,7 +9,8 @@
 
 <body>
     <input type="text" id="mensaje">
-    <button id="boton" onclick="enviar()">Enviar</button>
+    <button onclick="enviar()">Enviar</button>
+    <button onclick="ordenar()">Ordenar</button>
 
     <div id="chat"></div>
     <script>
@@ -22,11 +23,23 @@
         }
 
         function cargar() {
+            let mensaje = document.getElementById("mensaje").value
             let crear = document.createElement("p")
             crear.append(mensaje)
             document.getElementById("chat").append(crear)
+            crear.innerHTML += "<button>Borrar</button>"
 
         }
+
+        function ordenar (){
+            for(i=0;i<mensajes.length;i++){
+                
+            }
+            mensajes.sort()
+
+        }
+
+
         
 
     </script>
