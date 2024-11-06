@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
 </head>
+
 <body>
     <input type="text" id="mensaje">
-    <button id="boton">Enviar</button>
+    <button id="boton" onclick="enviar()">Enviar</button>
 
     <div id="chat"></div>
+    <script>
+        var mensajes = []
+
+        function enviar() {
+            let mensaje = document.getElementById("mensaje").value
+            mensajes.push(mensaje)
+            cargar()
+        }
+
+        function cargar() {
+            let crear = document.createElement("p")
+            crear.append(mensaje)
+            document.getElementById("chat").append(crear)
+
+        }
+        
+
+    </script>
 </body>
+
 </html>
