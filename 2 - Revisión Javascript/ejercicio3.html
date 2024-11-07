@@ -13,7 +13,7 @@
 </head>
 
 <body>
-
+    <form action="">
     <label for="">Nombre</label><input type="text" id="nombre" required><span class="error" id="campo1"></span><br>
     <label for="">Apellido</label><input type="text" id="apellido" required><span class="error" id="campo2"></span><br>
     <label for="">Correo Electronico</label><input type="text" id="correo" required><span class="error"
@@ -29,9 +29,11 @@
         class="error" id="campo9"></span>
     <button id="enviar" onclick="validar()">Enviar</button>
     <p id="respuesta"></p>
+    </form>
 
     <script>
         function validar() {
+            event.preventDefault()
             document.getElementById("respuesta").innerHTML = ""
             let nombre = document.getElementById("nombre").value
             let apellido = document.getElementById("apellido").value
