@@ -14,21 +14,22 @@
 
 <body>
     <form action="">
-    <label for="">Nombre</label><input type="text" id="nombre" required><span class="error" id="campo1"></span><br>
-    <label for="">Apellido</label><input type="text" id="apellido" required><span class="error" id="campo2"></span><br>
-    <label for="">Correo Electronico</label><input type="text" id="correo" required><span class="error"
-        id="campo3"></span><br>
-    <label for="">Dirección</label><input type="text" id="direccion"><span class="error" id="campo4"></span><br>
-    <label for="">Ciudad</label><input type="text" id="ciudad"><span class="error" id="campo5"></span><br>
-    <label for="">Telefono</label><input type="text" id="telefono"><span class="error" id="campo6"></span><br>
-    <label for="">DNI</label><input type="text" id="dni" required onkeyup="sin_espacio(dni)"><span class="error"
-        id="campo7"></span><br>
-    <label for="">PIN</label><input type="password" id="pin" required onkeyup="sin_espacio(pin)"><span class="error"
-        id="campo8"></span><br>
-    <label for="">Repita el PIN</label><input type="password" id="pin2" required onkeyup="sin_espacio(pin2)"><span
-        class="error" id="campo9"></span>
-    <button id="enviar" onclick="validar()">Enviar</button>
-    <p id="respuesta"></p>
+        <label for="">Nombre</label><input type="text" id="nombre" required><span class="error" id="campo1"></span><br>
+        <label for="">Apellido</label><input type="text" id="apellido" required><span class="error"
+            id="campo2"></span><br>
+        <label for="">Correo Electronico</label><input type="email" id="correo" required><span class="error"
+            id="campo3"></span><br>
+        <label for="">Dirección</label><input type="text" id="direccion"><span class="error" id="campo4"></span><br>
+        <label for="">Ciudad</label><input type="text" id="ciudad"><span class="error" id="campo5"></span><br>
+        <label for="">Telefono</label><input type="text" id="telefono"><span class="error" id="campo6"></span><br>
+        <label for="">DNI</label><input type="text" id="dni" required onkeyup="sin_espacio(dni)"><span class="error"
+            id="campo7"></span><br>
+        <label for="">PIN</label><input type="password" id="pin" required onkeyup="sin_espacio(pin)"><span class="error"
+            id="campo8"></span><br>
+        <label for="">Repita el PIN</label><input type="password" id="pin2" required onkeyup="sin_espacio(pin2)"><span
+            class="error" id="campo9"></span>
+        <button id="enviar" onclick="validar()">Enviar</button>
+        <p id="respuesta"></p>
     </form>
 
     <script>
@@ -42,13 +43,14 @@
             let dni = document.getElementById("dni").value
             let pin = document.getElementById("pin").value
             let pin2 = document.getElementById("pin2").value
+            let patronEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
 
             let n = nombre.substr(0, 2);
             let a = apellido.substr(0, 2);
             let t = telefono.substr(-3);
             let usuario = (n + a + t).toLowerCase(); // Convertir a minúsculas
 
-           let hayErrores = false;
+            let hayErrores = false;
 
 
 
@@ -67,10 +69,13 @@
             }
 
             if (correo == "") {
-                document.getElementById("campo3").innerHTML = "Rellene este campo"
+                document.getElementById("campo3").innerHTML = "Rellene este campo";
+                hayErrores = true;
+            } else if (!patronEmail.test(correo)) {  // Validar formato del correo
+                document.getElementById("campo3").innerHTML = "Formato de correo no válido";
                 hayErrores = true;
             } else {
-                document.getElementById("campo3").innerHTML = ""
+                document.getElementById("campo3").innerHTML = "";
             }
 
             if (dni == "") {
@@ -127,6 +132,7 @@
             if (!hayErrores) {
                 document.getElementById("respuesta").innerHTML = "Usuario: " + usuario
             }
+
 
         }
 
