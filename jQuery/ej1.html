@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJercicio 1 de jQuery</title>
+    <script src="jquery-3.7.1.js"></script> <!--Opción local -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+    <!--Opción remota -->
+</head>
+
+<body>
+    <h1>Ejemplo de jQuery</h1>
+    <p>1-Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, eaque, dignissimos aspernatur nesciunt sequi
+        minus praesentium a magnam perferendis rerum enim autem et explicabo voluptate? Debitis natus sunt dignissimos
+        blanditiis.</p>
+    <p class="par">2-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi nam quas tenetur, debitis
+        assumenda excepturi consequuntur blanditiis nesciunt eius ullam, repellat architecto harum obcaecati officiis
+        eveniet alias unde, sed omnis!</p>
+    <p>3-Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem beatae, maiores veritatis, quaerat culpa
+        sunt perspiciatis qui autem eligendi asperiores saepe sint distinctio atque praesentium magnam doloribus totam
+        excepturi velit.</p>
+    <p class="par">4-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo suscipit, a iusto dolore tempore
+        perspiciatis? Animi sapiente tempora molestiae quod, reiciendis neque autem provident ipsam exercitationem
+        quasi, eos perspiciatis maxime!</p>
+    <button id="ocultar">Click para ocultar párrafo con jQuery</button>
+    <button id="mostrar">Click para mostrar párrafo con jQuery</button>
+    <button id="alternar">Click para alternar</button>
+    <script>
+        $(document).ready(function () {
+            // Cuando el sitio web se haya cargado por completo
+            $("#ocultar").click(function () {
+                $(".par").hide();
+            })
+            $("#mostrar").click(function () {
+                $(".par").show();
+            })
+            $("#alternar").click(function () {
+                $(".par").toggle();
+            })
+        });
+    </script>
+</body>
+
+</html>
