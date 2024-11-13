@@ -16,7 +16,8 @@
             border-radius: 10px;
         }
     </style>
-<!-- Incluye jQuery -->    
+<!-- Incluye jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>    
 </head>
 <body>
     <h1>Función existe</h1>
@@ -35,6 +36,15 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error eaque sit nemo! Voluptatem expedita hic ipsam minima eligendi id, labore non veritatis <a href="">atque amet ipsum mollitia</a>  dignissimos? Mollitia, fuga ea!</p>
     <script>
         /* Rellena aquí con el código jQuery */
+        $(document).ready(function () {
+            if ($('h2').length) {
+        // si existe
+        console.log("Existe")
+        } else {
+        // no existe
+        console.log("No existe")
+        }
+        });
       </script>
 </body>
 </html>
