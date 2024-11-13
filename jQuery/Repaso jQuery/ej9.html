@@ -14,15 +14,17 @@
         }
         img {
             border-radius: 10px;
+            height: 100px;
         }
     </style>
     <!-- Incluye aquí jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>    
 </head>
 <body>
     <h1>Las funciones each y append en jQuery</h1>
     <ul>
         <li><a href="">Enlace 1</a></li>
-        <li><a href="">Enlace 2</a></li>
+        <li><a href="">Enlace 2</a></li> 
         <li><a href="">Enlace 3</a></li>
         <li><a href="">Enlace 4</a></li>
         <li><a href="">Enlace 5</a></li>
@@ -31,6 +33,11 @@
 
     <script>
         /* Rellena aquí el código jQuery */
+        $(document).ready(function () {
+            $("li").each(function(){
+                $("a").append('<img src="../../images/jquery-icon.png" alt="">')
+            })
+        });
      </script>
 </body>
 </html>
