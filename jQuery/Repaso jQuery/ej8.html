@@ -17,6 +17,7 @@
         }
     </style>
     <!-- Incluye aquí jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>    
 </head>
 <body>
     <h1>getters en jQuery</h1>
@@ -38,6 +39,17 @@
 
     <script>
        /* Rellena aquí el código jQuery */
+       $(document).ready(function () {
+        $("#btn-imagen").click(function(){
+            alert($("img").attr("src"));
+        })
+        $("#btn-encabezado").click(function(){
+            alert($("h1").html());
+        })
+        $("#btn-parrafo").click(function(){
+            alert($("p").html());
+        })
+       });
     </script>
 </body>
 </html>
