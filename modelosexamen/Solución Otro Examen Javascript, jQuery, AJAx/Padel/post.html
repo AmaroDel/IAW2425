@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+
+<body>
+    <button id="boton">Visualizar</button>
+    <div id="#objetivo"></div>
+    <script>
+        $(document).ready(function () {
+            $("#boton").click(function () {
+                let url = "https://jsonplaceholder.typicode.com/posts"
+                $.get(url).done(function (datos) {
+                    console.log(datos);
+                    let longitud = datos.lenght
+                    for (let i = 0; i < longitud; i++) {
+                        let titulo = datos[i].title;
+                        let post = datos[i].body;
+                        $('#objetivo').text(
+                            '<p>Título: ' + titulo + '</p>' +
+                            '<p>Precio: ' + post + '</p>');
+                    }
+                })
+            })
+        });
+    </script>
+</body>
+
+</html>
