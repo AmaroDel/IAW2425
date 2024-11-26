@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" type="image/x-icon">
     <title>Pokemon</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <style>body{text-align: center;}</style>
 </head>
 
 <body>
@@ -22,26 +24,25 @@
                 $.ajax({
                     url: enlace, success: function (datos) {
                         console.log(datos)
-                            let imagen = datos.sprites.front_default
-                            let nombre = datos.name
-                            let numero = datos.id
-                            let stats1 = datos.stats[0]
-                            let stats2 = datos.stats[1]
-                            let stats3 = datos.stats[2]
-                            let stats4 = datos.stats[3]
-                            let stats5 = datos.stats[4]
-                            let stats6 = datos.stats[5]
-
+                            let imagen = datos.sprites.front_default;
+                            let nombre = datos.name;
+                            let numero = datos.id;
+                            var estadisticas = [];
+                            //Generamos un bucle que almacene las estadisticas del pokemon
+                            $(datos.stats).each(function(index,estadistica){
+                                estadisticas.push(datos.stats[index].base_stat);
+                            });
+                           
                             $("div").append(
                                 '<p><img src="' + imagen + '"></p>' +
                                 '<p>Nombre: ' + nombre + '</p>' +
                                 '<p>Numero: ' + numero + '</p>' +
-                                '<p>Stats: ' + stats1 + '</p>' +
-                                '<p>Stats: ' + stats2 + '</p>' +
-                                '<p>Stats: ' + stats3 + '</p>' +
-                                '<p>Stats: ' + stats4 + '</p>' +
-                                '<p>Stats: ' + stats5 + '</p>' +
-                                '<p>Stats: ' + stats6 + '</p>'
+                                '<p>PS: ' + estadisticas[0] + '</p>' +
+                                '<p>Ataque: ' + estadisticas[1] + '</p>' +
+                                '<p>Defensa: ' + estadisticas[2] + '</p>' +
+                                '<p>Ataque esp.: ' + estadisticas[3] + '</p>' +
+                                '<p>Defensa esp: ' + estadisticas[4] + '</p>' +
+                                '<p>Velocidad: ' + estadisticas[5] + '</p>'
 
                             )
                         
