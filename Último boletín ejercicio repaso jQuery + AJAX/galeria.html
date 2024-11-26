@@ -17,6 +17,7 @@
         $(document).ready(function () {
             $("button").click(function () {
                 let url = "https://jsonplaceholder.typicode.com/photos"
+                $('#galeria').text('');
                     $.get(url).done(function (datos) {
                         console.log(datos)
                         for (let i = 0; +/*i < datos.length*/ i < 20; i++) {
