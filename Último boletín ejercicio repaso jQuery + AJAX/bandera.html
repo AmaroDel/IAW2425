@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paises</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+
+<body>
+    <label for="">Dime un país</label><input type="text" id="pais">
+    <button>Ver</button>
+    <div></div>
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                $("div").text("")
+                let pais = $("#pais").val();
+                let enlace = "https://restcountries.com/v3.1/name/"+pais+"?fields=name,capital,population,flags"
+                $.ajax({
+                    url: enlace, success: function (datos) {
+                        let nombre = datos[0].name.common
+                        let capital = datos[0].capital[0]
+                        let población = datos[0].population
+                        let bandera = datos[0].flags.png
+                        $("div").append(
+                            '<p>Nombre: ' + nombre + '</p>' +
+                            '<p>Capital: ' + capital + '</p>' +
+                            '<p>Población: ' + población + '</p>' +
+                            '<p>Bandera:<img src="' + bandera + '"></p>' 
+
+                        )
+                    }
+                }).fail(function(){
+                    $("div").text("Error en el servidor")
+
+                })
+            })
+        });
+
+    </script>
+</body>
+
+</html>
