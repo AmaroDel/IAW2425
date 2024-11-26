@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de fotos</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+
+<body>
+    <img src="" alt="">
+    <h1>Galería de foto foto</h1>
+    <button>Vamo a verla no pisha?</button>
+    <div id="galeria"></div>
+    <script>
+        $(document).ready(function () {
+            $("button").click(function () {
+                let url = "https://jsonplaceholder.typicode.com/photos"
+                    $.get(url).done(function (datos) {
+                        console.log(datos)
+                        for (let i = 0; +/*i < datos.length*/ i < 20; i++) {
+                            let foto = datos[i].url
+                            $("#galeria").append(
+                                '<p>' + '<img src="' + foto + '"></p>'
+
+                            )
+                        }
+                    }).fail(function () {
+                        $("#galeria").text("Error en el servidor")
+                    })
+            })
+        });
+    </script>
+</body>
+
+</html>
