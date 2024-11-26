@@ -10,21 +10,23 @@
 
 <body>
     <button id="boton">Visualizar</button>
-    <div id="#objetivo"></div>
+    <div id="objetivo"></div>
     <script>
         $(document).ready(function () {
             $("#boton").click(function () {
                 let url = "https://jsonplaceholder.typicode.com/posts"
                 $.get(url).done(function (datos) {
                     console.log(datos);
-                    let longitud = datos.lenght
+                    let longitud = datos.length
                     for (let i = 0; i < longitud; i++) {
                         let titulo = datos[i].title;
                         let post = datos[i].body;
-                        $('#objetivo').text(
+                        $('#objetivo').append(
                             '<p>Título: ' + titulo + '</p>' +
-                            '<p>Precio: ' + post + '</p>');
+                            '<p>Body: ' + post + '</p>');
                     }
+                }).fail(function () {
+                    $('#objetivo').text('Error en el servidor o ciudad no valida');
                 })
             })
         });
