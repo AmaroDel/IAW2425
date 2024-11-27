@@ -1,4 +1,3 @@
-GNU nano 7.2                         mix.php                                  
 <!DOCTYPE html>
 <html lang="es">
 <head>
