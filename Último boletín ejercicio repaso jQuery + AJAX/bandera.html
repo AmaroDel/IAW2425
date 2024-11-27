@@ -15,7 +15,7 @@
     <script>
         $(document).ready(function () {
             $("button").click(function () {
-                $("div").text("")
+                $("div").empty()
                 let pais = $("#pais").val();
                 let enlace = "https://restcountries.com/v3.1/name/"+pais+"?fields=name,capital,population,flags"
                 $.ajax({
@@ -24,7 +24,7 @@
                         let capital = datos[0].capital[0]
                         let población = datos[0].population
                         let bandera = datos[0].flags.png
-                        $("div").append(
+                        $("div").html(
                             '<p>Nombre: ' + nombre + '</p>' +
                             '<p>Capital: ' + capital + '</p>' +
                             '<p>Población: ' + población + '</p>' +
