@@ -14,7 +14,7 @@
     <script>
         $(document).ready(function () {
             $("#boton").click(function () {
-                $('#objetivo').text('');
+                $('#objetivo').empty();
                 let url = "https://jsonplaceholder.typicode.com/posts"
                 $.get(url).done(function (datos) {
                     console.log(datos);
