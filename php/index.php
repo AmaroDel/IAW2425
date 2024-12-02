@@ -7,4 +7,5 @@ echo "<p>Esta es una prueba para verificar que el servidor Apache con PHP está 
 
 // Mostrar información de PHP
 phpinfo();
+
 ?>
