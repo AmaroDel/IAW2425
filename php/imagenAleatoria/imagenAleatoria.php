@@ -24,7 +24,7 @@
 <body>
 <?php 
     $array = array("luffy", "zoro", "nami", "ussop", "sanji", "chopper", "robin", "franky", "brook", "jinbe");
-    $random = rand(0,9);
+    $random = rand(0,count($array)-1);
     $tripulante = $array[$random];
 ?>
     <h1>Tripulante Aleatorio:</h1><div><img src="<?= $tripulante; ?>.png" alt=""></div>
