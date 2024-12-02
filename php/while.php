@@ -12,7 +12,7 @@
     echo "<table border='1'>";
     while ($numero <= $total){
         echo "<tr><td>" . $numero . "</td></tr>\n";
-        $numero ++;
+        $numero += 1;
     }
     echo "</table>";
     ?>
