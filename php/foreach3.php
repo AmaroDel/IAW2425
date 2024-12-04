@@ -3,49 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foreach3</title>
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <title>For each 3</title>
     <style>
-        .tweet-container {
+        body{
+            display:flex;
+            flex-direction: row;
+            margin: 0 auto;
+        }
+        #tweet{
+            border: 0.5px solid #d0d0d0;
+            margin: 0rem 0rem 0.01rem; 
+            text-align: center;
             width: 100%;
-            max-width: 500px;
-            margin: 10px auto;
-            padding: 10px;
-            border: 1px solid #e1e8ed;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-            font-family: Arial, sans-serif;
         }
-        .tweet-header {
-            font-size: 14px;
-            color: #657786;
+        img{margin-top: 1rem;}
+        main{
+            display:flex;
+            flex-direction: column;
+            width: 50%;
+            margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
         }
-        .tweet-content {
-            font-size: 16px;
-            color: #14171a; 
-        }
+        aside{width: 25%;}
     </style>
 </head>
 <body>
 
-<?php
-    $tweets = [
-        "primer tweet",
-        "segundo tweet",
-        "tercer tweet",
-        "cuarto tweet"
-    ];
+    <?php
+        $tweets = [ 
+            ["tweet" => "¡Hola mundo! Este es mi primer tweet.", 
+            "usuario" => "usuario1", "fecha" => "03-12-2024 17:11:00" ], 
+            [ "tweet" => "¡Estoy aprendiendo PHP y es muy interesante!", 
+            "usuario" => "usuario2", "fecha" => "03-12-2024 16:45:00" ], 
+            ["tweet" => "¿Alguna recomendación de libros de programación?", 
+            "usuario" => "usuario3", "fecha" => "03-12-2024 15:30:00"],
+            ["tweet" => "¿Cuál es tu lenguaje de programación favorito?", 
+            "usuario" => "usuario4", "fecha" => "03-12-2024 11:30:00" ],
+            [ "tweet" => "Estoy participando en un hackathon virtual. ¡Es muy divertido!", 
+            "usuario" => "usuario5", "fecha" => "03-12-2024 10:45:00" ], 
+            ["tweet" => "Recordatorio del día: No te olvides de hacer commit regularmente.",
+            "usuario" => "usuario6", "fecha" => "03-12-2024 09:55:00" ],
+            ["tweet" => "El café es el mejor amigo de un programador.",
+            "usuario" => "usuario7", "fecha" => "03-12-2024 08:30:00"]
+        ];
+        
+        echo"<aside><img src='../img/inicioX.png' height='auto'></aside>";
+        echo"<main>";
 
-    function mostrarTweet($tweet) {
-        return "<div class='tweet-container'>
-                    <div class='tweet-header'>Usuario @ejemplo</div>
-                    <div class='tweet-content'>$tweet</div>
-                </div>";
-    }
+        foreach($tweets as $publicacion){
+            
+            echo"<div id='tweet'>";
 
-    foreach ($tweets as $tweet) {
-        echo mostrarTweet($tweet);
-    }
-?>
+            foreach($publicacion as $elemento => $elemento2){   
 
+                 echo"<p>  $elemento : $elemento2  </p>";
+
+            }
+
+            echo"</div>";
+        }
+        echo"</main>";
+        echo"<aside><img src='../img/inicioX2.png'></aside>";
+    ?>
 </body>
 </html>
