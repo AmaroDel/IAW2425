@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <style>
+        span {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="">
+        <!-- Pro tip ;)(label+input+span.error+br)*10-->
+        <label for=""></label>Nombre<input type="text" id="nombre"><span class="error" id="campo1"></span><br>
+        <label for=""></label>Primer apellido<input type="text" id="apellido1"><span class="error"
+            id="campo2"></span><br>
+        <label for=""></label>Segundo apellido<input type="text" id="apellido2"><span class="error"
+            id="campo3"></span><br>
+        <label for=""></label>DNI<input type="text" id="dni"><span class="error" id="campo4"></span><br>
+        <label for=""></label>Email<input type="email" id="email"><span class="error" id="campo5"></span><br>
+        <label for=""></label>Contraseña<input type="password" id="contrasena"><span class="error"
+            id="campo6"></span><br>
+        <label for=""></label>Repita la contraseña<input type="password" id="contrasena2"><span class="error"
+            id="campo7"></span><br>
+        <label for=""></label>Descripción<input type="text" id="descripcion"><span id="campo8"></span><br>
+        <label for=""></label>Fecha de nacimiento<input type="text" id="nacimiento"><span id="campo9"></span><br>
+        <label for=""></label>Acepta tratamiento de sus datos<input type="checkbox" id="politica"><span class="error"
+            id="campo10"></span><br>
+        <button id="boton">Enviar</button>
+    </form>
+
+    <p id="usuario"></p>
+
+    <script>
+        $(document).ready(function () {
+            $("#boton").click(function () {
+                event.preventDefault()
+                $(".error").empty();
+
+                let nombre = $("#nombre").val()
+                let apellido1 = $("#apellido1").val()
+                let apellido2 = $("#apellido2").val()
+                let dni = $("#dni").val()
+                let email = $("#email").val()
+                let contrasena1 = $("#contrasena").val()
+                let contrasena2 = $("#contrasena2").val()
+                let descripcion = $("#descripcion").val()
+                let nacimiento = $("#nacimiento").val()
+                let politica = $("#politica").is(':checked')
+                let patronEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+                let patronDni = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$/i;
+                let patronContrasena = /^.{8,}$/;
+
+
+
+                if (nombre == "") {
+                    $("#campo1").text("El campo nombre es necesario para completar el formulario")
+                }
+
+                if (apellido1 == "") {
+                    $("#campo2").text("El campo apellido1 es necesario para completar el formulario")
+                }
+
+                if (apellido2 == "") {
+                    $("#campo3").text("El campo apellido2 es necesario para completar el formulario")
+                }
+
+                if (dni == "") {
+                    $("#campo4").text("El campo dni es necesario para completar el formulario")
+                } else {
+                    if (!patronDni.test(dni)) {
+                        $("#campo4").text("12345678X")
+                    } else if (!calculaLetra(dni)) {
+                        $("#campo4").text("La letra es erronea")
+                    }
+                }
+
+                if (email == "") {
+                    $("#campo5").text("El campo email es necesario para completar el formulario")
+                } else {
+                    if (!patronEmail.test(email)) {
+                        //No encaja con el patrón de Email
+                        $("#campo5").text("Formato no válido de correo");
+                    }
+                }
+
+                if (contrasena1 == "") {
+                    $("#campo6").text("El campo contraseña es necesario para completar el formulario")
+                }
+
+                if (contrasena2 == "") {
+                    $("#campo7").text("El campo repite tu contraseña es necesario para completar el formulario")
+                }
+
+                if (contrasena1 != contrasena2) {
+                    $("#campo6").text("Las contraseñas deben coincidir")
+                    $("#campo7").text("Las contraseñas deben coincidir")
+                } else if (!patronContrasena.test(contrasena1)) {
+                    $("#campo6").text("No cumple con los requisitos. Longitud mínima 8 caracteres.")
+
+                } else if (!patronContrasena.test(contrasena2)) {
+                    $("#campo7").text("No cumple con los requisitos. Longitud mínima 8 caracteres.")
+                }
+
+                if (!politica) {
+                    $("#campo10").text("Acepte el tratamiento de sus datos")
+                }
+
+                let error = $(".error").text();
+
+                if (error == "") {
+
+                    // Eliminar espacios en blanco de las cadenas
+                    nombre = nombre.replace(/\s+/g, '');
+                    apellido1 = apellido1.replace(/\s+/g, '');
+                    apellido2 = apellido2.replace(/\s+/g, '');
+                    dni = dni.replace(/\s+/g, '');
+
+                    let n = nombre.charAt(0);
+                    let a1 = apellido1.substr(0, 3);
+                    let a2 = apellido2.substr(0, 3);
+                    let d = dni.substr(5,3); // Tomar los últimos 3 dígitos del DNI
+                    let usuario = (n + a1 + a2 + d).toLowerCase(); // Convertir a minúsculas
+                    $("#usuario").text("Su usuario es: " + usuario);
+                }
+
+
+
+
+
+                function calculaLetra() {
+                    let letras = ["T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"];
+                    let numero = parseInt(document.getElementById("dni").value);
+                    let resto = numero % 23; //Resto de la división entre 23
+                    let letraCorrecta = letras[resto]
+                    let letraDni = dni.charAt(8).toUpperCase(); // Calcular la letra
+                    return letraCorrecta == letraDni; // Letra proporcionada
+                }
+            })
+        });
+    </script>
+
+</body>
+
+</html>
