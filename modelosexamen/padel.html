@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,45 +17,52 @@
             background-color: rgb(238, 198, 146);
             font-size: 1.5em;
         }
-        .container{
-            display:flex;
+
+        .container {
+            display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid black;
             border-radius: 10px;
             margin: 0 auto;
-            width:  50vw;
+            width: 50vw;
             padding: 50px;
             background-color: lightgoldenrodyellow;
         }
+
         h1 {
             margin-top: 50px;
-            text-align:center;
+            text-align: center;
         }
-        select{
+
+        select {
             font-size: 1em;
             text-align: center;
-            width:52vw; 
+            width: 52vw;
         }
+
         input[type="text"] {
             font-size: 1em;
             text-align: center;
-            width:51vw;
+            width: 51vw;
         }
+
         input[type="checkbox"] {
-            width:3vh;
+            width: 3vh;
             text-align: left !important;
         }
+
         button {
             font-size: 1em;
             text-align: center;
-            width:52vw;
+            width: 52vw;
             background-color: rgb(238, 198, 146);
             border-radius: 10px;
             margin-top: 0.5em;
         }
     </style>
 </head>
+
 <body>
     <h1>Reserva pista pádel</h1>
     <div class="container">
@@ -68,8 +76,8 @@
                 <option value="2">Pista Nº 2</option>
                 <option value="3">Pista Nº 3</option>
                 <option value="4">Pista Nº 4</option>
-              </select>
-              <br>
+            </select>
+            <br>
             <label for="hora">Hora del partido:</label>
             <br>
             <select id="hora" name="hora">
@@ -82,8 +90,8 @@
                 <option value="7">18:00 - 19:00 (16 €)</option>
                 <option value="8">19:00 - 20:00 (16 €)</option>
                 <option value="9">20:00 - 21:00 (16 €)</option>
-              </select>
-              <br>
+            </select>
+            <br>
             <label for="luz">Marque si necesita luz en pista (+ 4€):</label>
             <input type="checkbox" name="luz" id="luz">
             <br>
@@ -91,9 +99,66 @@
             <p id="diaReserva"></p>
             <p id="totalPrecio">Precio: </p>
         </form>
-     </div>
+    </div>
     <script>
-        
+
+        /* Ponemos los selectores de fecha en español */
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $(document).ready(function () {
+            $("#fecha").datepicker({ minDate: +1, maxDate: "+1W" });
+            $("#reserva").click(function (p) {
+                p.preventDefault();
+                let hora = $("#hora").val();
+                let luz = $("#luz").is(':checked')
+                let precio = 0
+                let fecha = $("#fecha").val();
+                let pista = $("#pista").val();
+
+                switch (hora) {
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                        precio = 10
+                        break;
+                    case "5":
+                    case "6":
+                        precio = 12
+                        break;
+                    case "7":
+                    case "8":
+                    case "9":
+                        precio = 16
+                        break;
+                }
+                if (luz) {
+                    precio += 4
+                }
+
+                $("#diaReserva").html("Reserva el " + fecha + " la pista " + pista);
+
+                $("#totalPrecio").text("Precio: " + precio + "€")
+            })
+        });
     </script>
 </body>
+
 </html>
