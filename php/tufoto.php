@@ -6,7 +6,7 @@
     <title>Foto</title>
 </head>
 <body>
-<form action="index.php" method="POST" enctype="multipart/form-data">
+<form action="tufoto.php" method="POST" enctype="multipart/form-data">
 <!--Añadir imagen:--> 
 <input name="archivo" id="archivo" type="file"/>
 <input type="submit" name="subir" value="Subir imagen"/>
