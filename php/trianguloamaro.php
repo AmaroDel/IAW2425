@@ -15,12 +15,20 @@
         if (isset($_GET["numero"])){
             $numero= htmlspecialchars($_GET["numero"]);
                 if ($numero > 0 && is_numeric($numero)){
+                    $num=1;
+                    while ($num<=3){
                     for ($i=1;$i<=$numero; $i++){
                         for($j=1;$j<=$i; $j++){
                             echo "* ";
                         }
                         echo "<br>";
                     }
+                    $num++;
+                }
+                for($filas =1; $filas<=4;$filas++ ){
+                    echo "*";
+                    echo "<br>";
+                }
                 }
         }
     ?>
