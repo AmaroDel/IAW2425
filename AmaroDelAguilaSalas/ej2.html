@@ -1,21 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 2</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
+
 <body>
     <label for="">Masa:</label><input type="text" id="masa"><br>
     <label for="">Velocidad:</label><input type="text" id="velocidad"><br>
     <button id="boton">Enviar</button>
+    <p id="texto"></p>
     <script>
         $(document).ready(function () {
-            $("#boton").click(function(){
-                let masa = parseFloat($("#masa").val()) 
+            $("#boton").click(function () {
+                $("#texto").empty()
+                let masa = parseFloat($("#masa").val())
+                let velocidad = parseFloat($("#velocidad").val())
+
+                if (isNaN(masa) || isNaN(velocidad) || masa == "" || velocidad == "") {
+                    $("#texto").text("Campo vacío o valor no válido")
+                } else {
+                    if (esNumeroPositivo(document.getElementById("masa").value) && esNumeroPositivo(document.getElementById("velocidad").value)) {
+
+                        let total = (masa * velocidad * velocidad) / 2
+
+                        if (total<10){
+                            $("#texto").text("La energía cinética es baja: "+total+" Joules")
+                        }
+                        else if (total>100){
+                            $("#texto").text("La energía cinética es alta: "+total+" Joules")
+                        }else{
+                            $("#texto").text("La energía cinética es moderada: "+total+" Joules")
+                        }
+
+                    } else {
+                        $("#texto").text("No es un número positivo")
+                    }
+                }
+
+
+
+
             })
-        });
+            function esNumeroPositivo(x){
+            if (isNaN(x))
+            return false;
+            else{
+                if (x>0)
+                    return true;
+                else
+                return false;
+            }
+        }
+        }
+        );
     </script>
 </body>
+
 </html>
