@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giphy</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+
+<body>
+    <label for="">Escribe algo</label><input type="text" id="frase">
+    <button id="boton">Buscar</button>
+    <div id="texto"></div>
+    <script>
+        $(document).ready(function () {
+            $("#boton").click(function () {
+                $("#texto").empty()
+                let frase = $("#frase").val()
+                let enlace = "https://api.giphy.com/v1/stickers/search?api_key=2Zwd8X4nCEqHB8KRogp1Y35guU2GnTyJ&q=" + frase + "&limit=25&offset=0&rating=g&lang=en&bundle=messaging_non_clips"
+                $.get(enlace).done(function (datos) {
+                    console.log(datos)
+                    for (let i = 0; +i < datos.data.length; i++) {
+                        let foto = datos.data[i].images.original.url
+                        $("#texto").append(
+                            '<p>' + '<img src="' + foto + '"></p>'
+
+                        )
+                    }
+                }).fail(function(){
+                    $("#texto").text("Error cargando datos del servidor")
+                })
+            })
+        });
+    </script>
+</body>
+
+</html>
