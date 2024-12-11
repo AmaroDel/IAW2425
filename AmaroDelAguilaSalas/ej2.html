@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+    <label for="">Masa:</label><input type="text" id="masa"><br>
+    <label for="">Velocidad:</label><input type="text" id="velocidad"><br>
+    <button id="boton">Enviar</button>
+    <script>
+        $(document).ready(function () {
+            $("#boton").click(function(){
+                let masa = parseFloat($("#masa").val()) 
+            })
+        });
+    </script>
+</body>
+</html>
