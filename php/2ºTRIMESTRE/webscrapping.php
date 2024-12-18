@@ -20,7 +20,7 @@
     "/[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}/i",$text,$matches);
     if ($res) {
           foreach(array_unique($matches[0]) as $email) {
-          echo $email . "<br />";
+          echo $email . "<br/>";
     }
   }
   else {
