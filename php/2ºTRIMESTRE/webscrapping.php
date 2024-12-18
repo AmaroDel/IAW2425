@@ -1,5 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>webscrapping</title>
+</head>
+<body>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-<input type="text" name="url" size="50" value="<?php echo $the_url;  ?>"/><br />
+<input type="text" name="url" size="50" value=""/><br />
   <input type="submit" value="Buscar emails" />
 </form> 
 <?php
@@ -20,4 +28,5 @@
   }
 }
 ?>
-
+</body>
+</html>
