@@ -10,7 +10,7 @@ session_start();
 // Set session variables
 $_SESSION["favcolor"] = "green";
 $_SESSION["favanimal"] = "cat";
-echo "Se han c";
+echo "Se han cargado";
 ?>
 
 </body>
