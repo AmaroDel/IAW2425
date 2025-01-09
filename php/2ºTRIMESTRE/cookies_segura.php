@@ -7,7 +7,7 @@ if ( isset( $_COOKIE[ 'visitas' ] ) ) {
 }
 else {
 
-    setcookie( 'visitas', 1, time() + 3600 * 24 );
+    setcookie( 'visitas', 1, time() + 3600 * 24, httponly:true );
     $mensaje = 'Bienvenido por primera vez a nuesta web' . " usando el idioma " .$_COOKIE['lang'];
 }
 //El html va abajo porque esto froma parte de la cabecera
