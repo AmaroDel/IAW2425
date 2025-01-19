@@ -1,7 +1,7 @@
 <?php
     $servername = "sql308.thsite.top";
     $username = "thsi_38097484";
-    $password = "A1EbhYLa";
+    $password = "*****";
 
 try {
   $conn = new PDO("mysql:host=$servername;dbname=thsi_38097484_ejemplo", $username, $password);

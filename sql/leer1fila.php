@@ -2,7 +2,7 @@
 //Conexión con BD
     $servername = "sql308.thsite.top";
     $username = "thsi_38097484";
-    $password = "A1EbhYLa";
+    $password = "*****";
     $bd= "thsi_38097484_ejemplo";
     $enlace= mysqli_connect($servername,$username,$password,$bd);
     if (!$enlace){
