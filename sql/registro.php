@@ -1,6 +1,6 @@
 <?php
 // Conexión a la base de datos
-$servername = "sql308.thsite.top"; // Nombre del servidor
+$servername = ""; // Nombre del servidor
 $username = ""; // Nombre de usuario
 $password = ""; // Contrasena
 $database = "";
