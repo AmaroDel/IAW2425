@@ -1,9 +1,11 @@
 <?php
+session_start();
+
 // Conexión a la base de datos
 $servername = ""; // Nombre del servidor
 $username = ""; // Nombre de usuario
-$password = ""; // Contrasena
-$database = "";
+$password = ""; // Contraseña
+$database = ""; // Nombre de la base de datos
 $enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
@@ -22,27 +24,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = htmlspecialchars(trim($_POST['email']));
     $password = htmlspecialchars(trim($_POST['password']));
 
-    // Consultar el usuario por email
-    $query = "SELECT * FROM usuarios WHERE email='$email'";
-    $resultado = mysqli_query($enlace, $query);
+    // Consultar el usuario por email usando sentencias preparadas
+    $query = "SELECT * FROM usuarios WHERE email=?";
+    $stmt = mysqli_prepare($enlace, $query);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($resultado) === 1) {
         // Recuperar los datos del usuario
         $usuario = mysqli_fetch_assoc($resultado);
 
-        // Usar el hash almacenado como el salt para cifrar la contraseña ingresada
-        $password_hashed = crypt($password, $usuario['password']);
-
         // Verificar la contraseña (comparación estricta)
-        //if ($usuario['password'] === $password){ // CASO 1 (GRAN ERROR)
-        if (hash_equals($usuario['password'], $password_hashed)) {
-            echo "Inicio de sesión exitoso. Bienvenido, " . $usuario['nombre'] . "!";
+        if (hash_equals($usuario['password'], crypt($password, $usuario['password']))) {
+            // Iniciar sesión y redirigir al usuario
+            $_SESSION['user_id'] = $usuario['id'];
+            $_SESSION['username'] = $usuario['nombre'];
+            header('Location: dashboard.php');
+            exit();
         } else {
-            echo "Error: Contraseña incorrecta." . $password_hashed . " es diferente de " . $usuario['password'];
+            echo "Error: Contraseña incorrecta.";
         }
     } else {
         echo "Error: Usuario no encontrado.";
     }
+
+    mysqli_stmt_close($stmt);
 }
 
 mysqli_close($enlace);
@@ -55,7 +62,7 @@ mysqli_close($enlace);
     <title>Login</title>
 </head>
 <body>
-    <form method="POST" action="loginjl.php">
+    <form method="POST" action="loginproyecto.php">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br>
         <label for="password">Contraseña:</label>
