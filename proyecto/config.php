@@ -1,9 +1,9 @@
 <?php
 // Conexión a la base de datos
-$servername = "sql308.thsite.top";
-$username = "thsi_38097484";
-$password = "A1EbhYLa";
-$database = "thsi_38097484_ejemplo";
+$servername = "******";
+$username = "**********";
+$password = "*********";
+$database = "*********";
 $conn = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
