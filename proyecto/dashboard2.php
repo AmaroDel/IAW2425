@@ -51,7 +51,6 @@ if (!$resultado) {
         <table border="1">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Título</th>
                     <th>Tipo</th>
                     <th>Departamento</th>
@@ -74,7 +73,6 @@ if (!$resultado) {
                 <!-- Iterar sobre los resultados de la consulta -->
                 <?php while ($actividad = mysqli_fetch_assoc($resultado)): ?>
                     <tr>
-                        <td><?php echo escapar($actividad['id']); ?></td>
                         <td><?php echo escapar($actividad['titulo']); ?></td>
                         <td><?php echo escapar($actividad['tipo_nombre']); ?></td>
                         <td><?php echo escapar($actividad['departamento_nombre']); ?></td>
