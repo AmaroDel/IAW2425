@@ -2,9 +2,9 @@
 // Iniciar la sesión
 session_start();
 
-// Verificar si el usuario ha iniciado sesión
+// Verificar si el usuario está autenticado
 if (!isset($_SESSION['user_id'])) {
-    // Si no ha iniciado sesión, redirigir al usuario a la página de inicio de sesión
+    // Redirigir al usuario a la página de inicio de sesión si no está autenticado
     header('Location: loginproyecto.php');
     exit();
 }
@@ -13,20 +13,20 @@ if (!isset($_SESSION['user_id'])) {
 include 'config.php';
 include 'funciones.php';
 
-// Generar el token CSRF
+// Generar un token CSRF
 csrf();
 
-// Establecer el juego de caracteres a utf8mb4
+// Establecer el juego de caracteres de la conexión a la base de datos
 mysqli_set_charset($conn, "utf8mb4");
 
-// Procesar formulario al enviarlo
+// Verificar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Verificar el token CSRF
     if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
         die('Token CSRF inválido.');
     }
 
-    // Saneamiento de las entradas
+    // Obtener y escapar los datos del formulario
     $titulo = mysqli_real_escape_string($conn, $_POST['titulo']);
     $tipo = mysqli_real_escape_string($conn, $_POST['tipo']);
     $departamento = mysqli_real_escape_string($conn, $_POST['departamento']);
@@ -37,28 +37,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $fecha_fin = mysqli_real_escape_string($conn, $_POST['fecha_fin']);
     $hora_fin = mysqli_real_escape_string($conn, $_POST['hora_fin']);
     $organizador = mysqli_real_escape_string($conn, $_POST['organizador']);
-    $acompanantes = mysqli_real_escape_string($conn, $_POST['acompanantes']);
     $ubicacion = mysqli_real_escape_string($conn, $_POST['ubicacion']);
     $coste = mysqli_real_escape_string($conn, $_POST['coste']);
     $total_alumnos = mysqli_real_escape_string($conn, $_POST['total_alumnos']);
     $objetivo = mysqli_real_escape_string($conn, $_POST['objetivo']);
+    $acompanantes = mysqli_real_escape_string($conn, $_POST['acompanantes']); // Nuevo campo
 
-    // Consulta SQL para insertar nueva actividad
-    $sql = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, acompañantes, ubicacion, coste, total_alumnos, objetivo)
-            VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$acompanantes', '$ubicacion', '$coste', '$total_alumnos', '$objetivo')";
+    // Consulta SQL para insertar los datos en la base de datos
+    $sql = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, ubicacion, coste, total_alumnos, objetivo, acompanantes)
+            VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$ubicacion', '$coste', '$total_alumnos', '$objetivo', '$acompanantes')";
 
-    // Ejecutar la consulta y verificar si fue exitosa
+    // Ejecutar la consulta y manejar posibles errores
     if (mysqli_query($conn, $sql)) {
-        // Redirigir al dashboard si la inserción fue exitosa
         header('Location: dashboard.php');
         exit();
     } else {
-        // Mostrar mensaje de error si la inserción falló
         echo "Error: " . escapar($sql) . "<br>" . mysqli_error($conn);
     }
 }
 
-// Obtener datos para los selects
+// Obtener datos para los selects del formulario
 $sql_departamentos = "SELECT id, nombre FROM departamentos";
 $result_departamentos = mysqli_query($conn, $sql_departamentos);
 
@@ -74,18 +72,20 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
 <head>
     <meta charset="UTF-8">
     <title>Crear Actividad</title>
+    <!-- Se han eliminado las referencias a CSS y Bootstrap para simplificar el código -->
 </head>
 <body>
     <div>
+        <!-- Título de la página y enlace para volver al dashboard -->
         <div>
             <h2>Crear Actividad</h2>
-            <!-- Botón para volver al dashboard -->
             <a href="dashboard.php">Volver al Dashboard</a>
         </div>
         <!-- Formulario para crear una nueva actividad -->
         <form method="POST" action="">
             <!-- Campo oculto para el token CSRF -->
             <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
+            <!-- Campos del formulario -->
             <div>
                 <label for="titulo">Título:</label>
                 <input type="text" id="titulo" name="titulo" required>
@@ -145,10 +145,6 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
                 <input type="text" id="organizador" name="organizador" required>
             </div>
             <div>
-                <label for="acompanantes">Acompañantes:</label>
-                <textarea id="acompanantes" name="acompanantes"></textarea>
-            </div>
-            <div>
                 <label for="ubicacion">Ubicación:</label>
                 <input type="text" id="ubicacion" name="ubicacion" required>
             </div>
@@ -159,6 +155,10 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
             <div>
                 <label for="total_alumnos">Total Alumnos:</label>
                 <input type="number" id="total_alumnos" name="total_alumnos" required>
+            </div>
+            <div>
+                <label for="acompanantes">Acompañantes:</label>
+                <input type="text" id="acompanantes" name="acompanantes" required>
             </div>
             <div>
                 <label for="objetivo">Objetivo:</label>

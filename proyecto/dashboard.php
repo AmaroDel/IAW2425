@@ -44,7 +44,7 @@ if (!$resultado) {
     <div>
         <h2>Dashboard de Actividades</h2>
         <!-- Enlace para añadir una nueva actividad -->
-        <a href="nueva_actividad.php">Añadir Nueva Actividad</a>
+        <a href="create.php">Añadir Nueva Actividad</a>
         <!-- Enlace para cerrar sesión -->
         <a href="logout.php">Cerrar Sesión</a>
         <!-- Tabla para mostrar las actividades -->
@@ -83,7 +83,7 @@ if (!$resultado) {
                         <td><?php echo escapar($actividad['fecha_fin']); ?></td>
                         <td><?php echo escapar($actividad['hora_fin']); ?></td>
                         <td><?php echo escapar($actividad['organizador']); ?></td>
-                        <td><?php echo escapar($actividad['acompañantes']); ?></td>
+                        <td><?php echo escapar($actividad['acompanantes']); ?></td>
                         <td><?php echo escapar($actividad['ubicacion']); ?></td>
                         <td><?php echo escapar($actividad['coste']); ?></td>
                         <td><?php echo escapar($actividad['total_alumnos']); ?></td>
