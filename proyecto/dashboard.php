@@ -16,6 +16,9 @@ include 'funciones.php';
 // Establecer el juego de caracteres a utf8mb4
 mysqli_set_charset($conn, "utf8mb4");
 
+// Obtener información del usuario
+$usuario = $_SESSION;
+
 // Consulta SQL para obtener todas las actividades con nombres de tipos, departamentos y profesores
 $sql = "SELECT actividades.*, tipos.nombre AS tipo_nombre, departamentos.nombre AS departamento_nombre, profesores.nombre AS profesor_nombre
         FROM actividades
@@ -66,7 +69,12 @@ if (!$resultado) {
                     <th>Coste</th>
                     <th>Total Alumnos</th>
                     <th>Objetivo</th>
+                    <!-- Estado de aprobación -->
+                    <th>Aprobada</th>
+                    <!-- Verificar si el rol del usuario es 1 (administrador) para mostrar la columna "Acciones" -->
+                    <?php if ($usuario['rol'] ==1 ): ?>
                     <th>Acciones</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -88,11 +96,17 @@ if (!$resultado) {
                         <td><?php echo escapar($actividad['coste']); ?></td>
                         <td><?php echo escapar($actividad['total_alumnos']); ?></td>
                         <td><?php echo escapar($actividad['objetivo']); ?></td>
+                        <!-- Mostrar 'Sí' si está aprobada, 'No' si no lo está -->
+                        <td> <?php echo escapar($actividad['aprobada'] ? 'Sí' : 'No'); ?></td>
                         <td>
-                            <!-- Enlace para editar la actividad -->
-                            <a href="update.php?id=<?php echo escapar($actividad['id']); ?>">Editar</a>
-                            <!-- Enlace para eliminar la actividad -->
-                            <a href="delete.php?id=<?php echo escapar($actividad['id']); ?>">Eliminar</a>
+                            <?php if ($usuario['rol'] == 1): ?>
+                                <!-- Enlace para editar la actividad -->
+                                <a href="update.php?id=<?php echo escapar($actividad['id']); ?>">Editar</a>
+                                <!-- Enlace para eliminar la actividad -->
+                                <a href="delete.php?id=<?php echo escapar($actividad['id']); ?>">Eliminar</a>
+                                 <!-- Enlace para cambiar el estado de aprobación -->
+                                <a href="aprobar.php?id=<?php echo escapar ($actividad['id']); ?>">Aprobr</a> 
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endwhile; ?>

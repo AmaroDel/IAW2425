@@ -8,6 +8,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Verificar si el usuario es administrador
+if (\$_SESSION['rol'] != 1) {
+    // Si el usuario no es administrador, redirigir al dashboard
+    header('Location: dashboard.php');
+    exit();
+}
+
 // Incluir archivos de configuración y funciones
 include 'config.php';
 include 'funciones.php';

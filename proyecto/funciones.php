@@ -1,8 +1,10 @@
 <?php
+// Función para escapar caracteres especiales en HTML
 function escapar($html) {
     return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
 }
 
+// Función para generar y almacenar un token CSRF en la sesión
 function csrf() {
     session_start();
 
@@ -16,4 +18,5 @@ function csrf() {
         }
     }
 }
+
 ?>
