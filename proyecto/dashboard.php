@@ -19,12 +19,24 @@ mysqli_set_charset($conn, "utf8mb4");
 // Obtener información del usuario
 $usuario = $_SESSION;
 
-// Consulta SQL para obtener todas las actividades con nombres de tipos, departamentos y profesores
-$sql = "SELECT actividades.*, tipos.nombre AS tipo_nombre, departamentos.nombre AS departamento_nombre, profesores.nombre AS profesor_nombre
+// Capturar los parámetros de ordenación desde la URL
+$column = isset($_GET['column']) ? $_GET['column'] : 'id';
+$order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+
+// Alternar entre ASC y DESC
+$order = ($order === 'ASC') ? 'DESC' : 'ASC';
+
+// Consulta SQL con orden dinámico
+$sql = "SELECT actividades.*, 
+               tipos.nombre AS tipo_nombre, 
+               departamentos.nombre AS departamento_nombre, 
+               profesores.nombre AS profesor_nombre
         FROM actividades
         JOIN tipos ON actividades.tipo = tipos.id
         JOIN departamentos ON actividades.departamento = departamentos.id
-        JOIN profesores ON actividades.profesor_responsable = profesores.id";
+        JOIN profesores ON actividades.profesor_responsable = profesores.id
+        ORDER BY $column $order";
+
 
 // Ejecutar la consulta
 $resultado = mysqli_query($conn, $sql);
@@ -54,23 +66,22 @@ if (!$resultado) {
         <table border="1">
             <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Tipo</th>
-                    <th>Departamento</th>
-                    <th>Profesor Responsable</th>
-                    <th>Trimestre</th>
-                    <th>Fecha Inicio</th>
-                    <th>Hora Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Hora Fin</th>
-                    <th>Organizador</th>
-                    <th>Acompañantes</th>
-                    <th>Ubicación</th>
-                    <th>Coste</th>
-                    <th>Total Alumnos</th>
-                    <th>Objetivo</th>
-                    <!-- Estado de aprobación -->
-                    <th>Aprobada</th>
+                <th><a href="?column=titulo&order=<?= $order ?>">Título</a></th>
+                    <th><a href="?column=tipo_nombre&order=<?= $order ?>">Tipo</a></th>
+                    <th><a href="?column=departamento_nombre&order=<?= $order ?>">Departamento</a></th>
+                    <th><a href="?column=profesor_nombre&order=<?= $order ?>">Profesor Responsable</a></th>
+                    <th><a href="?column=trimestre&order=<?= $order ?>">Trimestre</a></th>
+                    <th><a href="?column=fecha_inicio&order=<?= $order ?>">Fecha Inicio</a></th>
+                    <th><a href="?column=hora_inicio&order=<?= $order ?>">Hora Inicio</a></th>
+                    <th><a href="?column=fecha_fin&order=<?= $order ?>">Fecha Fin</a></th>
+                    <th><a href="?column=hora_fin&order=<?= $order ?>">Hora Fin</a></th>
+                    <th><a href="?column=organizador&order=<?= $order ?>">Organizador</a></th>
+                    <th><a href="?column=acompanantes&order=<?= $order ?>">Acompañantes</a></th>
+                    <th><a href="?column=ubicacion&order=<?= $order ?>">Ubicación</a></th>
+                    <th><a href="?column=coste&order=<?= $order ?>">Coste</a></th>
+                    <th><a href="?column=total_alumnos&order=<?= $order ?>">Total Alumnos</a></th>
+                    <th><a href="?column=objetivo&order=<?= $order ?>">Objetivo</a></th>
+                    <th><a href="?column=aprobada&order=<?= $order ?>">Aprobada</a></th>
                     <!-- Verificar si el rol del usuario es 1 (administrador) para mostrar la columna "Acciones" -->
                     <?php if ($usuario['rol'] ==1 ): ?>
                     <th>Acciones</th>
