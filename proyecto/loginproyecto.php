@@ -2,10 +2,10 @@
 session_start();
 
 // Conexión a la base de datos
-$servername = "**********";
-$username = "**********";
-$password = "**********";
-$database = "**********";
+$servername = "*******";
+$username = "*********";
+$password = "***********";
+$database = "*********";
 $enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
@@ -16,15 +16,15 @@ if (!$enlace) {
 mysqli_set_charset($enlace, "utf8mb4");
 
 // Procesar formulario al enviarlo
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Validar que los campos no estén vacíos
-    if (empty($_POST['email']) || empty($_POST['password'])) {
+    if (empty($_POST["email"]) || empty($_POST["password"])) {
         die("Error: Todos los campos son obligatorios.");
     }
 
     // Saneamiento de las entradas
-    $email = htmlspecialchars(trim($_POST['email']));
-    $password = htmlspecialchars(trim($_POST['password']));
+    $email = htmlspecialchars(trim($_POST["email"]));
+    $password = htmlspecialchars(trim($_POST["password"]));
 
     // Consultar el usuario por email usando sentencias preparadas
     $query = "SELECT * FROM registrados WHERE email=?";
@@ -38,13 +38,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuario = mysqli_fetch_assoc($resultado);
 
         // Verificar la contraseña (comparación estricta)
-        if (hash_equals($usuario['password'], crypt($password, $usuario['password']))) {
+        if (
+            hash_equals(
+                $usuario["password"],
+                crypt($password, $usuario["password"])
+            )
+        ) {
             // Iniciar sesión y redirigir al usuario
-            $_SESSION['user_id'] = $usuario['id'];
-            $_SESSION['username'] = $usuario['nombre'];
+            $_SESSION["user_id"] = $usuario["id"];
+            $_SESSION["username"] = $usuario["nombre"];
             // Almacenar el rol del usuario en la sesión
-            $_SESSION['rol'] = $usuario['rol'];
-            header('Location: dashboard.php');
+            $_SESSION["rol"] = $usuario["rol"];
+            header("Location: dashboard.php");
             exit();
         } else {
             echo "Error: Contraseña incorrecta.";
@@ -69,7 +74,7 @@ mysqli_close($enlace);
 </head>
 <body>
     <div>
-        <h4>Iniciar Sesión</h4>
+        <h2>Iniciar Sesión</h2>
         <form method="POST" action="loginproyecto.php">
             <div>
                 <label for="email">Email:</label>
@@ -82,7 +87,7 @@ mysqli_close($enlace);
             <button type="submit">Iniciar sesión</button>
         </form>
         <p>
-            <a href="registro.php">No estás registrado</a>
+            <a href="registro.php">¿No estás registrado?</a>
         </p>
     </div>
 </body>

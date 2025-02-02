@@ -3,15 +3,15 @@
 session_start();
 
 // Verificar si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION["user_id"])) {
     // Redirigir al usuario a la página de inicio de sesión si no está autenticado
-    header('Location: loginproyecto.php');
+    header("Location: loginproyecto.php");
     exit();
 }
 
 // Incluir archivos de configuración y funciones
-include 'config.php';
-include 'funciones.php';
+include "config.php";
+include "funciones.php";
 
 // Generar un token CSRF
 csrf();
@@ -20,39 +20,75 @@ csrf();
 mysqli_set_charset($conn, "utf8mb4");
 
 // Verificar si el formulario ha sido enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar el token CSRF
-    if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
-        die('Token CSRF inválido.');
+    if (
+        isset($_POST["submit"]) &&
+        !hash_equals($_SESSION["csrf"], $_POST["csrf"])
+    ) {
+        die("Token CSRF inválido.");
     }
 
     // Obtener y escapar los datos del formulario
-    $titulo = mysqli_real_escape_string($conn, $_POST['titulo']);
-    $tipo = mysqli_real_escape_string($conn, $_POST['tipo']);
-    $departamento = mysqli_real_escape_string($conn, $_POST['departamento']);
-    $profesor_responsable = mysqli_real_escape_string($conn, $_POST['profesor_responsable']);
-    $trimestre = mysqli_real_escape_string($conn, $_POST['trimestre']);
-    $fecha_inicio = mysqli_real_escape_string($conn, $_POST['fecha_inicio']);
-    $hora_inicio = mysqli_real_escape_string($conn, $_POST['hora_inicio']);
-    $fecha_fin = mysqli_real_escape_string($conn, $_POST['fecha_fin']);
-    $hora_fin = mysqli_real_escape_string($conn, $_POST['hora_fin']);
-    $organizador = mysqli_real_escape_string($conn, $_POST['organizador']);
-    $ubicacion = mysqli_real_escape_string($conn, $_POST['ubicacion']);
-    $coste = mysqli_real_escape_string($conn, $_POST['coste']);
-    $total_alumnos = mysqli_real_escape_string($conn, $_POST['total_alumnos']);
-    $objetivo = mysqli_real_escape_string($conn, $_POST['objetivo']);
-    $acompanantes = mysqli_real_escape_string($conn, $_POST['acompanantes']); // Nuevo campo
+    $titulo = mysqli_real_escape_string($conn, $_POST["titulo"]);
+    $tipo = mysqli_real_escape_string($conn, $_POST["tipo"]);
+    $departamento = mysqli_real_escape_string($conn, $_POST["departamento"]);
+    $profesor_responsable = mysqli_real_escape_string(
+        $conn,
+        $_POST["profesor_responsable"]
+    );
+    $trimestre = mysqli_real_escape_string($conn, $_POST["trimestre"]);
+    $fecha_inicio = mysqli_real_escape_string($conn, $_POST["fecha_inicio"]);
+    $hora_inicio = mysqli_real_escape_string($conn, $_POST["hora_inicio"]);
+    $fecha_fin = mysqli_real_escape_string($conn, $_POST["fecha_fin"]);
+    $hora_fin = mysqli_real_escape_string($conn, $_POST["hora_fin"]);
+    $organizador = mysqli_real_escape_string($conn, $_POST["organizador"]);
+    $ubicacion = mysqli_real_escape_string($conn, $_POST["ubicacion"]);
+    $coste = mysqli_real_escape_string($conn, $_POST["coste"]);
+    $total_alumnos = mysqli_real_escape_string($conn, $_POST["total_alumnos"]);
+    $objetivo = mysqli_real_escape_string($conn, $_POST["objetivo"]);
+    $acompanantes = mysqli_real_escape_string($conn, $_POST["acompanantes"]); // Nuevo campo
 
     // Consulta SQL para insertar los datos en la base de datos
     $sql = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, ubicacion, coste, total_alumnos, objetivo, acompanantes)
             VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$ubicacion', '$coste', '$total_alumnos', '$objetivo', '$acompanantes')";
 
-    // Ejecutar la consulta y manejar posibles errores
-    if (mysqli_query($conn, $sql)) {
-        header('Location: dashboard.php');
-        exit();
+    $error = "";
+
+    // Verificar que la fecha y hora de inicio sean anteriores a la de fin
+    if (
+        strtotime($fecha_inicio . " " . $hora_inicio) >=
+        strtotime($fecha_fin . " " . $hora_fin)
+    ) {
+        $error =
+            "Error: La fecha y hora de inicio deben ser anteriores a la fecha y hora de fin.";
+    }
+
+    // Validar que el coste sea >= 0
+    if (!is_numeric($coste) || $coste < 0) {
+        $error = "Error: El coste debe ser un número mayor o igual a 0.";
+    }
+
+    // Validar que el total de alumnos sea un número entero mayor que 0
+    if (
+        !filter_var($total_alumnos, FILTER_VALIDATE_INT, [
+            "options" => ["min_range" => 1],
+        ])
+    ) {
+        $error = "Error: El número de alumnos debe ser un entero mayor que 0.";
+    }
+
+    // Si hay un error, no ejecutar la consulta y mostrar el mensaje
+    if (!empty($error)) {
+        echo "<p style='color: red;'>$error</p>";
     } else {
-        echo "Error: " . escapar($sql) . "<br>" . mysqli_error($conn);
+        // Ejecutar la consulta solo si no hay errores
+        if (mysqli_query($conn, $sql)) {
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            echo "Error: " . escapar($sql) . "<br>" . mysqli_error($conn);
+        }
     }
 }
 
@@ -84,7 +120,9 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
         <!-- Formulario para crear una nueva actividad -->
         <form method="POST" action="">
             <!-- Campo oculto para el token CSRF -->
-            <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION['csrf']); ?>">
+            <input name="csrf" type="hidden" value="<?php echo escapar(
+                $_SESSION["csrf"]
+            ); ?>">
             <!-- Campos del formulario -->
             <div>
                 <label for="titulo">Título:</label>
@@ -94,26 +132,36 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
                 <label for="tipo">Tipo:</label>
                 <select id="tipo" name="tipo" required>
                     <?php while ($row = mysqli_fetch_assoc($result_tipos)): ?>
-                        <option value="<?php echo escapar($row['id']); ?>"><?php echo escapar($row['nombre']); ?></option>
+                        <option value="<?php echo escapar(
+                            $row["id"]
+                        ); ?>"><?php echo escapar($row["nombre"]); ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
             <div>
                 <label for="departamento">Departamento:</label>
                 <select id="departamento" name="departamento" required>
-                    <?php mysqli_data_seek($result_departamentos, 0); // Reiniciar el puntero del resultado
+                    <?php
+                    mysqli_data_seek($result_departamentos, 0); // Reiniciar el puntero del resultado
                     while ($row = mysqli_fetch_assoc($result_departamentos)): ?>
-                        <option value="<?php echo escapar($row['id']); ?>"><?php echo escapar($row['nombre']); ?></option>
-                    <?php endwhile; ?>
+                        <option value="<?php echo escapar(
+                            $row["id"]
+                        ); ?>"><?php echo escapar($row["nombre"]); ?></option>
+                    <?php endwhile;
+                    ?>
                 </select>
             </div>
             <div>
                 <label for="profesor_responsable">Profesor Responsable:</label>
                 <select id="profesor_responsable" name="profesor_responsable" required>
-                    <?php mysqli_data_seek($result_profesores, 0); // Reiniciar el puntero del resultado
+                    <?php
+                    mysqli_data_seek($result_profesores, 0); // Reiniciar el puntero del resultado
                     while ($row = mysqli_fetch_assoc($result_profesores)): ?>
-                        <option value="<?php echo escapar($row['id']); ?>"><?php echo escapar($row['nombre']); ?></option>
-                    <?php endwhile; ?>
+                        <option value="<?php echo escapar(
+                            $row["id"]
+                        ); ?>"><?php echo escapar($row["nombre"]); ?></option>
+                    <?php endwhile;
+                    ?>
                 </select>
             </div>
             <div>
