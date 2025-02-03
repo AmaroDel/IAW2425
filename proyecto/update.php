@@ -84,6 +84,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ? mysqli_real_escape_string($conn, $_POST["objetivo"])
         : "";
 
+    // Convertir fechas y horas a formato datetime para comparar
+$inicio = strtotime("$fecha_inicio $hora_inicio");
+$fin = strtotime("$fecha_fin $hora_fin");
+
+if ($inicio === false || $fin === false || $inicio >= $fin) {
+    die("Error: La fecha y hora de inicio deben ser anteriores a la fecha y hora de fin.");
+}
+
+// Validar coste (precio >= 0)
+if (!is_numeric($coste) || $coste < 0) {
+    die("Error: El coste debe ser un número mayor o igual a 0.");
+}
+
+// Validar total de alumnos (entero positivo)
+if (!ctype_digit($total_alumnos) || intval($total_alumnos) <= 0) {
+    die("Error: El número total de alumnos debe ser un entero mayor que 0.");
+}
+
     // Construir la consulta SQL para actualizar solo los campos que han cambiado
     $sql = "UPDATE actividades SET ";
     $params = [];
@@ -229,9 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div>
                 <?php echo $error_message; ?>
             </div>
-        <?php // Reiniciar el puntero del resultado // Reiniciar el puntero del resultado
-            // Reiniciar el puntero del resultado
-            // Reiniciar el puntero del resultado
+        <?php // Reiniciar el puntero del resultado
             else: ?>
             <form method="POST" action="">
                 <!-- Campo oculto para el ID de la actividad -->
