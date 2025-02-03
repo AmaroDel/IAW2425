@@ -84,6 +84,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ? mysqli_real_escape_string($conn, $_POST["objetivo"])
         : "";
 
+    // Convertir fechas y horas a formato datetime para comparar
+$inicio = strtotime("$fecha_inicio $hora_inicio");
+$fin = strtotime("$fecha_fin $hora_fin");
+
+if ($inicio === false || $fin === false || $inicio >= $fin) {
+    die("Error: La fecha y hora de inicio deben ser anteriores a la fecha y hora de fin.");
+}
+
+// Validar coste (precio >= 0)
+if (!is_numeric($coste) || $coste < 0) {
+    die("Error: El coste debe ser un número mayor o igual a 0.");
+}
+
+// Validar total de alumnos (entero positivo)
+if (!ctype_digit($total_alumnos) || intval($total_alumnos) <= 0) {
+    die("Error: El número total de alumnos debe ser un entero mayor que 0.");
+}
+
     // Construir la consulta SQL para actualizar solo los campos que han cambiado
     $sql = "UPDATE actividades SET ";
     $params = [];
@@ -216,144 +234,170 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actualizar Actividad</title>
-    <!-- Enlace a Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100">
-
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <h2 class="card-title text-center mb-4">Actualizar Actividad</h2>
-
-                        <!-- Botón para volver al Dashboard -->
-                        <a href="dashboard.php" class="btn btn-secondary mb-3">Volver al Dashboard</a>
-
-                        <?php if (isset($error_message)): ?>
-                            <div class="alert alert-danger">
-                                <?php echo $error_message; ?>
-                            </div>
-                        <?php else: ?>
-                            <form method="POST" action="">
-                                <!-- Campo oculto para el ID de la actividad -->
-                                <input type="hidden" name="id" value="<?php echo escapar($row["id"]); ?>">
-                                <!-- Campo oculto para el token CSRF -->
-                                <input name="csrf" type="hidden" value="<?php echo escapar($_SESSION["csrf"]); ?>">
-
-                                <div class="mb-3">
-                                    <label for="titulo" class="form-label">Título:</label>
-                                    <input type="text" id="titulo" name="titulo" class="form-control" value="<?php echo escapar($row["titulo"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="tipo" class="form-label">Tipo:</label>
-                                    <select id="tipo" name="tipo" class="form-select">
-                                        <?php while ($tipo_row = mysqli_fetch_assoc($result_tipos)): ?>
-                                            <option value="<?php echo escapar($tipo_row["id"]); ?>" <?php if ($tipo_row["id"] == $row["tipo"]) { echo "selected"; } ?>>
-                                                <?php echo escapar($tipo_row["nombre"]); ?>
-                                            </option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="departamento" class="form-label">Departamento:</label>
-                                    <select id="departamento" name="departamento" class="form-select">
-                                        <?php mysqli_data_seek($result_departamentos, 0); ?>
-                                        <?php while ($departamento_row = mysqli_fetch_assoc($result_departamentos)): ?>
-                                            <option value="<?php echo escapar($departamento_row["id"]); ?>" <?php if ($departamento_row["id"] == $row["departamento"]) { echo "selected"; } ?>>
-                                                <?php echo escapar($departamento_row["nombre"]); ?>
-                                            </option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="profesor_responsable" class="form-label">Profesor Responsable:</label>
-                                    <select id="profesor_responsable" name="profesor_responsable" class="form-select">
-                                        <?php mysqli_data_seek($result_profesores, 0); ?>
-                                        <?php while ($profesor_row = mysqli_fetch_assoc($result_profesores)): ?>
-                                            <option value="<?php echo escapar($profesor_row["id"]); ?>" <?php if ($profesor_row["id"] == $row["profesor_responsable"]) { echo "selected"; } ?>>
-                                                <?php echo escapar($profesor_row["nombre"]); ?>
-                                            </option>
-                                        <?php endwhile; ?>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="trimestre" class="form-label">Trimestre:</label>
-                                    <select id="trimestre" name="trimestre" class="form-select">
-                                        <option value="1" <?php if ($row["trimestre"] == 1) { echo "selected"; } ?>>1</option>
-                                        <option value="2" <?php if ($row["trimestre"] == 2) { echo "selected"; } ?>>2</option>
-                                        <option value="3" <?php if ($row["trimestre"] == 3) { echo "selected"; } ?>>3</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="fecha_inicio" class="form-label">Fecha Inicio:</label>
-                                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="<?php echo escapar($row["fecha_inicio"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="hora_inicio" class="form-label">Hora Inicio:</label>
-                                    <input type="time" id="hora_inicio" name="hora_inicio" class="form-control" value="<?php echo escapar($row["hora_inicio"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="fecha_fin" class="form-label">Fecha Fin:</label>
-                                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="<?php echo escapar($row["fecha_fin"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="hora_fin" class="form-label">Hora Fin:</label>
-                                    <input type="time" id="hora_fin" name="hora_fin" class="form-control" value="<?php echo escapar($row["hora_fin"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="organizador" class="form-label">Organizador:</label>
-                                    <input type="text" id="organizador" name="organizador" class="form-control" value="<?php echo escapar($row["organizador"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="acompanantes" class="form-label">Acompañantes:</label>
-                                    <textarea id="acompanantes" name="acompanantes" class="form-control"><?php echo escapar($row["acompanantes"]); ?></textarea>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ubicacion" class="form-label">Ubicación:</label>
-                                    <input type="text" id="ubicacion" name="ubicacion" class="form-control" value="<?php echo escapar($row["ubicacion"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="coste" class="form-label">Coste:</label>
-                                    <input type="number" step="0.01" id="coste" name="coste" class="form-control" value="<?php echo escapar($row["coste"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="total_alumnos" class="form-label">Total Alumnos:</label>
-                                    <input type="number" id="total_alumnos" name="total_alumnos" class="form-control" value="<?php echo escapar($row["total_alumnos"]); ?>">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="objetivo" class="form-label">Objetivo:</label>
-                                    <textarea id="objetivo" name="objetivo" class="form-control"><?php echo escapar($row["objetivo"]); ?></textarea>
-                                </div>
-
-                                <!-- Botón para enviar el formulario -->
-                                <button type="submit" name="submit" class="btn btn-primary w-100">Actualizar Actividad</button>
-                            </form>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+<body>
+    <div>
+        <div>
+            <h2>Actualizar Actividad</h2>
+            <!-- Botón para volver al dashboard -->
+            <a href="dashboard.php">Volver al Dashboard</a>
         </div>
+        <?php if (isset($error_message)): ?>
+            <div>
+                <?php echo $error_message; ?>
+            </div>
+        <?php // Reiniciar el puntero del resultado
+            else: ?>
+            <form method="POST" action="">
+                <!-- Campo oculto para el ID de la actividad -->
+                <input type="hidden" name="id" value="<?php echo escapar(
+                    $row["id"]
+                ); ?>">
+                <!-- Campo oculto para el token CSRF -->
+                <input name="csrf" type="hidden" value="<?php echo escapar(
+                    $_SESSION["csrf"]
+                ); ?>">
+                <div>
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" name="titulo" value="<?php echo escapar(
+                        $row["titulo"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="tipo">Tipo:</label>
+                    <select id="tipo" name="tipo">
+                        <?php while (
+                            $tipo_row = mysqli_fetch_assoc($result_tipos)
+                        ): ?>
+                            <option value="<?php echo escapar(
+                                $tipo_row["id"]
+                            ); ?>" <?php if ($tipo_row["id"] == $row["tipo"]) {
+    echo "selected";
+} ?>><?php echo escapar($tipo_row["nombre"]); ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="departamento">Departamento:</label>
+                    <select id="departamento" name="departamento">
+                        <?php
+                        mysqli_data_seek($result_departamentos, 0);
+                        while (
+                            $departamento_row = mysqli_fetch_assoc(
+                                $result_departamentos
+                            )
+                        ): ?>
+                            <option value="<?php echo escapar(
+                                $departamento_row["id"]
+                            ); ?>" <?php if (
+    $departamento_row["id"] == $row["departamento"]
+) {
+    echo "selected";
+} ?>><?php echo escapar($departamento_row["nombre"]); ?></option>
+                        <?php endwhile;
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="profesor_responsable">Profesor Responsable:</label>
+                    <select id="profesor_responsable" name="profesor_responsable">
+                        <?php
+                        mysqli_data_seek($result_profesores, 0);
+                        while (
+                            $profesor_row = mysqli_fetch_assoc(
+                                $result_profesores
+                            )
+                        ): ?>
+                            <option value="<?php echo escapar(
+                                $profesor_row["id"]
+                            ); ?>" <?php if (
+    $profesor_row["id"] == $row["profesor_responsable"]
+) {
+    echo "selected";
+} ?>><?php echo escapar($profesor_row["nombre"]); ?></option>
+                        <?php endwhile;
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label for="trimestre">Trimestre:</label>
+                    <select id="trimestre" name="trimestre">
+                        <option value="1" <?php if ($row["trimestre"] == 1) {
+                            echo "selected";
+                        } ?>>1</option>
+                        <option value="2" <?php if ($row["trimestre"] == 2) {
+                            echo "selected";
+                        } ?>>2</option>
+                        <option value="3" <?php if ($row["trimestre"] == 3) {
+                            echo "selected";
+                        } ?>>3</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fecha_inicio">Fecha Inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo escapar(
+                        $row["fecha_inicio"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="hora_inicio">Hora Inicio:</label>
+                    <input type="time" id="hora_inicio" name="hora_inicio" value="<?php echo escapar(
+                        $row["hora_inicio"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="fecha_fin">Fecha Fin:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" value="<?php echo escapar(
+                        $row["fecha_fin"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="hora_fin">Hora Fin:</label>
+                    <input type="time" id="hora_fin" name="hora_fin" value="<?php echo escapar(
+                        $row["hora_fin"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="organizador">Organizador:</label>
+                    <input type="text" id="organizador" name="organizador" value="<?php echo escapar(
+                        $row["organizador"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="acompanantes">Acompañantes:</label>
+                    <textarea id="acompanantes" name="acompanantes"><?php echo escapar(
+                        $row["acompanantes"]
+                    ); ?></textarea>
+                </div>
+                <div>
+                    <label for="ubicacion">Ubicación:</label>
+                    <input type="text" id="ubicacion" name="ubicacion" value="<?php echo escapar(
+                        $row["ubicacion"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="coste">Coste:</label>
+                    <input type="number" step="0.01" id="coste" name="coste" value="<?php echo escapar(
+                        $row["coste"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="total_alumnos">Total Alumnos:</label>
+                    <input type="number" id="total_alumnos" name="total_alumnos" value="<?php echo escapar(
+                        $row["total_alumnos"]
+                    ); ?>">
+                </div>
+                <div>
+                    <label for="objetivo">Objetivo:</label>
+                    <textarea id="objetivo" name="objetivo"><?php echo escapar(
+                        $row["objetivo"]
+                    ); ?></textarea>
+                </div>
+                <!-- Botón para enviar el formulario -->
+                <button type="submit" name="submit">Actualizar Actividad</button>
+            </form>
+        <?php endif; ?>
     </div>
-
-    <!-- Incluir el script de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
