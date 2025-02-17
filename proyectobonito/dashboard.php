@@ -18,14 +18,22 @@ mysqli_set_charset($conn, "utf8mb4");
 // Obtener información del usuario
 $usuario = $_SESSION;
 
-// Capturar los parámetros de ordenación desde la URL
-$column = isset($_GET["column"]) ? $_GET["column"] : "id";
-$order = isset($_GET["order"]) ? $_GET["order"] : "ASC";
+// Definir lista blanca de columnas permitidas
+$columnas_permitidas = ["id", "titulo", "tipo_nombre", "departamento_nombre", "profesor_nombre", 
+                         "trimestre", "fecha_inicio", "hora_inicio", "fecha_fin", "hora_fin", 
+                         "organizador", "acompanantes", "ubicacion", "coste", "total_alumnos", 
+                         "objetivo", "aprobada"];
 
-// Alternar entre ASC y DESC
-$order = $order === "ASC" ? "DESC" : "ASC";
+// Capturar y validar la columna
+$column = isset($_GET["column"]) && in_array($_GET["column"], $columnas_permitidas) ? $_GET["column"] : "id";
 
-// Consulta SQL con orden dinámico
+// Capturar y validar el orden (solo permitir "ASC" o "DESC")
+$order = isset($_GET["order"]) && in_array($_GET["order"], ["ASC", "DESC"]) ? $_GET["order"] : "ASC";
+
+// Alternar entre ASC y DESC para los enlaces
+$order_toggle = ($order === "ASC") ? "DESC" : "ASC";
+
+// Consulta SQL segura
 $sql = "SELECT actividades.*, 
                tipos.nombre AS tipo_nombre, 
                departamentos.nombre AS departamento_nombre, 
