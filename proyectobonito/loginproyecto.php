@@ -37,6 +37,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_id"] = $usuario["id"];
             $_SESSION["username"] = $usuario["nombre"];
             $_SESSION["rol"] = $usuario["rol"];
+
+            // Obtenemos la fecha y hora actual en formato Año-Mes-Día Hora:Minutos:Segundos
+            $date = date('Y-m-d H:i:s');
+
+            // Formateamos el registro que se guardará en el archivo
+            $logEntry = "[$date] Usuario ID: " . ($usuario['nombre'] ?? 'Desconocido') . " accedió al sistema\n";
+            
+            // Escribimos el registro en el archivo logs.txt
+            file_put_contents('logs.txt', $logEntry, FILE_APPEND);
+
             header("Location: dashboard.php");
             exit();
         } else {
@@ -46,6 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "Error: Usuario no encontrado.";
     }
 
+
+    
     mysqli_stmt_close($stmt);
 }
 

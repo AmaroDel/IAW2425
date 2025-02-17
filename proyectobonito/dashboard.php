@@ -18,16 +18,6 @@ mysqli_set_charset($conn, "utf8mb4");
 // Obtener información del usuario
 $usuario = $_SESSION;
 
-// Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
-$date = date('d-m-Y H:i:s');
-
-// Formateamos el registro que se guardará en el archivo
-$logEntry = "[$date] Usuario: $user accedió al sistema\n";
-
-// Escribimos el registro en el archivo logs.txt
-// FILE_APPEND asegura que los registros nuevos se añadan sin borrar los anteriores
-file_put_contents('logs.txt', $logEntry, FILE_APPEND);
-
 // Definir lista blanca de columnas permitidas
 $columnas_permitidas = ["id", "titulo", "tipo_nombre", "departamento_nombre", "profesor_nombre", 
                          "trimestre", "fecha_inicio", "hora_inicio", "fecha_fin", "hora_fin", 
