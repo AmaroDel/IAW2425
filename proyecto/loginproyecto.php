@@ -1,5 +1,10 @@
 <?php
+// Iniciar sesión antes que cualquier otra cosa
 session_start();
+
+// Establecer la zona horaria a Madrid, España
+ini_set('date.timezone', 'Europe/Madrid');
+date_default_timezone_set('Europe/Madrid');
 
 // Conexión a la base de datos
 $servername = "*******";
@@ -38,8 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["username"] = $usuario["nombre"];
             $_SESSION["rol"] = $usuario["rol"];
 
-            // Obtenemos la fecha y hora actual en formato Año-Mes-Día Hora:Minutos:Segundos
-            $date = date('Y-m-d H:i:s');
+            // Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
+            $date = date('d-m-Y H:i:s');
+
+            // Actualizar la última conexión a la fecha y hora actual
+            $sql_update = "UPDATE registrados SET ultima_conexion = NOW() WHERE id = ?";
+            $stmt_update = mysqli_prepare($enlace, $sql_update);
+            mysqli_stmt_bind_param($stmt_update, "i", $usuario["id"]);
+            mysqli_stmt_execute($stmt_update);
+            mysqli_stmt_close($stmt_update);
 
             // Formateamos el registro que se guardará en el archivo
             $logEntry = "[$date] Usuario ID: " . ($usuario['nombre'] ?? 'Desconocido') . " accedió al sistema\n";
