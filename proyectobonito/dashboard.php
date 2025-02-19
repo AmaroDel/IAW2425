@@ -87,6 +87,7 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<h1> Bienvenido, con ip <?php echo $_SERVER['REMOTE_ADDR']; ?>
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
