@@ -26,6 +26,13 @@ mysqli_set_charset($conn, "utf8mb4");
 // Generar el token CSRF
 csrf();
 
+// Alternar modo oscuro si se hace clic en el botón
+if (isset($_GET['modo_oscuro'])) {
+    $_SESSION['modo_oscuro'] = !isset($_SESSION['modo_oscuro']) || !$_SESSION['modo_oscuro'];
+    header("Location: update.php?id=" . $_GET["id"]);
+    exit();
+}
+
 // Procesar formulario al enviarlo
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar el token CSRF
@@ -236,7 +243,7 @@ if (!ctype_digit($total_alumnos) || intval($total_alumnos) <= 0) {
     <meta charset="UTF-8">
     <title>Actualizar Actividad</title>
 </head>
-<body>
+<body class="<?php echo isset($_SESSION['modo_oscuro']) && $_SESSION['modo_oscuro'] ? 'modo-oscuro' : ''; ?>">
     <div>
         <div>
             <h2>Actualizar Actividad</h2>

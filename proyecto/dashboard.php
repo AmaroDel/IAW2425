@@ -104,8 +104,23 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <title>Dashboard</title>
     <!-- Incluir Bootstrap 5 desde un CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    /* Estilos para el modo oscuro */
+    body.modo-oscuro {
+        background-color: #121212; /* Fondo oscuro */
+        color: #f1f1f1; /* Texto claro */
+    }
+    body.modo-oscuro table, 
+    body.modo-oscuro th, 
+    body.modo-oscuro td, 
+    body.modo-oscuro div {
+    color: #f1f1f1; /* Texto claro */
+    border-color: #f1f1f1; /* Cambiar color de borde de la tabla */
+    }   
+</style>
+
 </head>
-<body>
+<body class="<?php echo isset($_SESSION['modo_oscuro']) && $_SESSION['modo_oscuro'] ? 'modo-oscuro' : ''; ?>">
 <h1>Bienvenido, <?php echo escapar($_SESSION["username"]); ?>, se conectó por última vez el <?php echo $fecha_conexion; ?> con la IP: <?php echo $_SERVER['REMOTE_ADDR']; ?>.</h1>
 <div class="container mt-4">
     <div class="row">

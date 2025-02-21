@@ -7,3 +7,4 @@
 [2025-02-18 10:39:29] Usuario ID: José Luis accedió al sistema
 [2025-02-19 10:15:59] Usuario ID: José Luis accedió al sistema
 [2025-02-19 11:53:48] Usuario ID: José Luis accedió al sistema
+[21-02-2025 18:25:18] Usuario ID: José Luis accedió al sistema
