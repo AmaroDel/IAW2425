@@ -1,30 +1,37 @@
 <?php
+// Iniciar la sesión para mantener la autenticación del usuario.
 session_start();
 
-// Habilitar la visualización de errores en PHP
+// Habilitar la visualización de errores en PHP para depuración.
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 
+// Establecer la zona horaria a Madrid, España.
 date_default_timezone_set('Europe/Madrid');
 
+// Verificar si el usuario ha iniciado sesión.
 if (!isset($_SESSION["user_id"])) {
-    header("Location: loginproyecto.php");
+    header("Location: loginproyecto.php"); // Redirigir al login si no ha iniciado sesión.
     exit();
 }
 
+// Incluir la configuración de la base de datos y funciones auxiliares.
 include "config.php";
 include "funciones.php";
+
+// Configurar la conexión para usar UTF-8 y evitar problemas con caracteres especiales.
 mysqli_set_charset($conn, "utf8mb4");
 
+// Obtener datos de la sesión del usuario.
 $usuario = $_SESSION;
 
-// **GESTIÓN DE DEPARTAMENTOS (Solo Administradores)**
+// Verificar si el usuario es administrador (rol 1).
 if ($usuario["rol"] == 1) {
 
-    // Agregar Departamento
+    // **AGREGAR DEPARTAMENTO**
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nombre"])) {
-        $nombre = trim($_POST["nombre"]);
+        $nombre = trim($_POST["nombre"]); // Limpiar espacios en blanco.
         if (!empty($nombre)) {
             $stmt = mysqli_prepare($conn, "INSERT INTO departamentos (nombre) VALUES (?)");
             mysqli_stmt_bind_param($stmt, "s", $nombre);
@@ -35,49 +42,60 @@ if ($usuario["rol"] == 1) {
             $_SESSION['error'] = "El nombre no puede estar vacío.";
         }
         header("Location: gestion_departamentos.php");
-        exit;
+        exit();
     }
 
-    // Eliminar Departamento
+    // **ELIMINAR DEPARTAMENTO**
     if (isset($_GET["eliminar"])) {
-        $id = (int)$_GET["eliminar"];
+        $id = (int)$_GET["eliminar"]; // Convertir ID a entero para mayor seguridad.
         $stmt = mysqli_prepare($conn, "DELETE FROM departamentos WHERE id = ?");
         mysqli_stmt_bind_param($stmt, "i", $id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         $_SESSION['mensaje'] = "Departamento eliminado correctamente.";
         header("Location: gestion_departamentos.php");
-        exit;
+        exit();
     }
 
-    // Editar Departamento
+    // **EDITAR DEPARTAMENTO**
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["editar_id"]) && isset($_POST["editar_nombre"])) {
-        $id = (int)$_POST["editar_id"];
+        $id = (int)$_POST["editar_id"]; // Convertir ID a entero.
         $nombre = trim($_POST["editar_nombre"]);
         if (!empty($nombre)) {
-            $stmt = mysqli_prepare($conn, "UPDATE departamentos SET nombre = ? WHERE id = ?");
-            mysqli_stmt_bind_param($stmt, "si", $nombre, $id);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_close($stmt);
+        // Preparar la consulta SQL para actualizar el departamento con un nuevo nombre
+        $stmt = mysqli_prepare($conn, "UPDATE departamentos SET nombre = ? WHERE id = ?");
+
+        // Asignar los valores a los marcadores ? de la consulta:
+        // "si" significa: 
+        // - "s" → String (nombre del departamento)
+        // - "i" → Integer (ID del departamento)
+        mysqli_stmt_bind_param($stmt, "si", $nombre, $id);
+
+        // Ejecutar la consulta SQL con los valores asignados
+        mysqli_stmt_execute($stmt);
+
+        // Cerrar el statement para liberar memoria
+        mysqli_stmt_close($stmt);
             $_SESSION['mensaje'] = "Departamento actualizado con éxito.";
         } else {
             $_SESSION['error'] = "El nombre no puede estar vacío.";
         }
         header("Location: gestion_departamentos.php");
-        exit;
+        exit();
     }
 
-    // Obtener lista de departamentos con paginación
-    $por_pagina = 5;
+    // **OBTENER LISTA DE DEPARTAMENTOS CON PAGINACIÓN**
+    $por_pagina = 5; // Cantidad de departamentos a mostrar por página.
     $pagina = isset($_GET['pagina']) && ctype_digit($_GET['pagina']) && $_GET['pagina'] > 0 ? (int)$_GET['pagina'] : 1;
-    $offset = ($pagina - 1) * $por_pagina;
+    $offset = ($pagina - 1) * $por_pagina; // Calcular el desplazamiento.
 
+    // Obtener los departamentos de la base de datos con límite y ordenados por ID descendente.
     $sql = "SELECT * FROM departamentos ORDER BY id DESC LIMIT $por_pagina OFFSET $offset";
     $result = mysqli_query($conn, $sql);
     $departamentos = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
 
-    // Contar total de departamentos para la paginación
+    // Contar el total de departamentos para calcular la paginación.
     $query = "SELECT COUNT(*) AS total FROM departamentos";
     $result = mysqli_query($conn, $query);
     $total_rows = mysqli_fetch_assoc($result)['total'];
@@ -97,15 +115,18 @@ if ($usuario["rol"] == 1) {
 <div class="container mt-4">
     <h1>Gestión de Departamentos</h1>
 
+    <!-- Botón para volver al Dashboard -->
+    <a href="dashboard.php" class="btn btn-secondary mb-3">⬅ Volver al Dashboard</a>
+
     <!-- Mensajes de éxito/error -->
     <?php if (isset($_SESSION['mensaje'])): ?>
-        <div class="alert alert-success"><?= $_SESSION['mensaje']; unset($_SESSION['mensaje']); ?></div>
+        <div class="alert alert-success"><?php echo escapar($_SESSION['mensaje']); unset($_SESSION['mensaje']); ?></div>
     <?php endif; ?>
     <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
+        <div class="alert alert-danger"><?php echo escapar($_SESSION['error']); unset($_SESSION['error']); ?></div>
     <?php endif; ?>
 
-    <!-- Formulario para agregar departamentos -->
+    <!-- Formulario para agregar un nuevo departamento -->
     <form method="post" class="mb-3 d-flex">
         <input type="text" name="nombre" placeholder="Nuevo Departamento" class="form-control me-2" required>
         <button type="submit" class="btn btn-primary">Agregar</button>
@@ -122,10 +143,10 @@ if ($usuario["rol"] == 1) {
         <tbody>
             <?php foreach ($departamentos as $d): ?>
                 <tr>
-                    <td><?= htmlspecialchars($d["nombre"]) ?></td>
+                    <td><?php echo escapar($d["nombre"]); ?></td>
                     <td>
-                        <button onclick="editarDepartamento(<?= $d['id'] ?>, '<?= htmlspecialchars($d['nombre']) ?>')" class="btn btn-warning btn-sm">✏️ Editar</button>
-                        <a href="?eliminar=<?= $d['id'] ?>" onclick="return confirm('¿Seguro que deseas eliminar este departamento?')" class="btn btn-danger btn-sm">❌ Eliminar</a>
+                        <button onclick="editarDepartamento(<?php echo $d['id']; ?>, '<?php echo escapar($d['nombre']); ?>')" class="btn btn-warning btn-sm">✏️ Editar</button>
+                        <a href="?eliminar=<?php echo $d['id']; ?>" onclick="return confirm('¿Seguro que deseas eliminar este departamento?')" class="btn btn-danger btn-sm">❌ Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -136,14 +157,14 @@ if ($usuario["rol"] == 1) {
     <nav>
         <ul class="pagination">
             <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-                <li class="page-item <?= ($i == $pagina) ? 'active' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $i ?>"><?= $i ?></a>
+                <li class="page-item <?php echo ($i == $pagina) ? 'active' : ''; ?>">
+                    <a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
                 </li>
             <?php endfor; ?>
         </ul>
     </nav>
 
-    <!-- Formulario oculto para edición -->
+    <!-- Formulario oculto para editar un departamento -->
     <form id="editForm" method="post" class="d-flex" style="display: none;">
         <input type="hidden" name="editar_id" id="editar_id">
         <input type="text" name="editar_nombre" id="editar_nombre" class="form-control me-2" required>
