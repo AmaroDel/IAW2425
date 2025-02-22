@@ -170,7 +170,9 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <a href="create.php" class="btn btn-primary me-2">Añadir Nueva Actividad</a>
     <!-- Enlace para cerrar sesión -->
     <a href="logout.php" class="btn btn-danger">Cerrar Sesión</a>
-    <!-- Enlace para cerrar sesión -->
+        <!-- Enlace para modo oscuro -->
+    <a href="oscuro.php" class="btn btn-warning me-2">Activar Modo Oscuro</a>
+    <!-- Enlace para descargar -->
     <a href="descargar.php"><button>Descargar</button></a>
     <!-- Enlace para modo oscuro -->
     <a href="oscuro.php" class="modo-oscuro-btn">Activar Modo Oscuro</a>
