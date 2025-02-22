@@ -1,5 +1,4 @@
 <?php
-
 // Iniciar la sesión
 session_start();
 
@@ -13,8 +12,8 @@ mysqli_set_charset($conn, "utf8mb4");
 // Consulta SQL para obtener estadísticas de actividades por departamento y trimestre
 $sql = "SELECT 
             d.nombre AS departamento,  -- Obtener el nombre del departamento
-            SUM(a.estado = 'aprobada') AS aprobadas,  -- Contar actividades aprobadas
-            SUM(a.estado = 'no aprobada') AS no_aprobadas,  -- Contar actividades no aprobadas
+            SUM(a.aprobada = 1) AS aprobadas,  -- Contar actividades aprobadas
+            SUM(a.aprobada = 0) AS no_aprobadas,  -- Contar actividades no aprobadas
             SUM(a.trimestre = 1) AS trimestre_1,  -- Contar actividades del trimestre 1
             SUM(a.trimestre = 2) AS trimestre_2,  -- Contar actividades del trimestre 2
             SUM(a.trimestre = 3) AS trimestre_3  -- Contar actividades del trimestre 3
