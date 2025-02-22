@@ -44,7 +44,7 @@ $id_usuario = $_GET["id"] ?? null;
     <div class="container mt-4">
         <h2>Cambiar Contraseña</h2>
         <form method="POST" action="admin_cambiar_password.php">
-            <input type="hidden" name="id" value="<?= echo escapar($id_usuario) ?>">
+            <input type="hidden" name="id" value="<?php echo escapar($id_usuario) ?>">
             <div class="mb-3">
                 <label for="password" class="form-label">Nueva Contraseña:</label>
                 <input type="password" class="form-control" name="password" required>
