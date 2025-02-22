@@ -16,6 +16,12 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
+// Manejar el cambio de tema (AJAX)
+if (isset($_POST['theme'])) {
+    $_SESSION['theme'] = $_POST['theme'];
+    exit;
+}
+
 // Incluir archivos de configuración y funciones
 include "config.php";
 include "funciones.php";
@@ -119,13 +125,35 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <title>Dashboard</title>
     <!-- Incluir Bootstrap 5 desde un CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 
 </head>
-<body> 
+<body class="<?php echo isset($_SESSION['theme']) && $_SESSION['theme'] == 'dark' ? 'dark-mode' : ''; ?>"> 
 <h1>Bienvenido, <?php echo escapar($_SESSION["username"]); ?>, 
     se conectó por última vez el <?php echo $fecha_conexion; ?> 
     con la IP: <?php echo $ip_usuario; ?>.
 </h1>
+
+<!-- Interruptor de modo oscuro -->
+<label class="switch">
+    <input type="checkbox" id="theme-toggle" <?php echo isset($_SESSION['theme']) && $_SESSION['theme'] == 'dark' ? 'checked' : ''; ?>>
+    <span class="slider round"></span>
+</label>
+
+<script>
+    document.getElementById("theme-toggle").addEventListener("change", function() {
+        let theme = this.checked ? "dark" : "light";
+
+        fetch("dashboard.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "theme=" + theme
+        }).then(() => {
+            document.body.classList.toggle("dark-mode", this.checked);
+        });
+    });
+</script>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
