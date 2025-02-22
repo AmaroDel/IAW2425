@@ -50,6 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Guardamos la última conexión antes de actualizarla
             $_SESSION["ultima_conexion"] = $usuario["ultima_conexion"];
+            
+
+            // Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
+            $date = date('d-m-Y H:i:s');
 
             // Actualizar la última conexión a la fecha y hora actual
             $sql_update = "UPDATE registrados SET ultima_conexion = NOW() WHERE id = ?";
@@ -58,11 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mysqli_stmt_execute($stmt_update);
             mysqli_stmt_close($stmt_update);
 
-            // Guardamos en logs.txt
-            $date = date('d-m-Y H:i:s');
+            // Formateamos el registro que se guardará en el archivo
             $logEntry = "[$date] Usuario ID: " . ($usuario['nombre'] ?? 'Desconocido') . " accedió al sistema\n";
+            
+            // Escribimos el registro en el archivo logs.txt
             file_put_contents('logs.txt', $logEntry, FILE_APPEND);
-
             header("Location: dashboard.php");
             exit();
         } else {
