@@ -5,6 +5,9 @@ session_start();
 include "config.php";
 include "funciones.php";
 
+// Establecer el juego de caracteres a utf8mb4
+mysqli_set_charset($conn, "utf8mb4");
+
 // Verificar si el usuario es administrador (rol = 1)
 if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] != 1) {
     header("Location: dashboard.php");

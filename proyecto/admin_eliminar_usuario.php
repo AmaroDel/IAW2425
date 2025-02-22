@@ -5,6 +5,9 @@ session_start();
 include "config.php";
 include "funciones.php";
 
+// Establecer el juego de caracteres a utf8mb4
+mysqli_set_charset($conn, "utf8mb4");
+
 // Verificar que el usuario sea administrador
 if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] != 1) {
     header("Location: dashboard.php");
@@ -27,7 +30,7 @@ if ($id_usuario == $_SESSION["user_id"]) {
 
 
 // Primero, eliminar todas las actividades organizadas por el usuario
-$sql_actividades = "DELETE FROM actividades WHERE organizador_id = ?";
+$sql_actividades = "DELETE FROM actividades WHERE profesor_responsable = ?";
 $stmt_actividades = mysqli_prepare($conn, $sql_actividades);
 mysqli_stmt_bind_param($stmt_actividades, "i", $id_usuario);
 mysqli_stmt_execute($stmt_actividades);

@@ -5,6 +5,9 @@ session_start();
 include "config.php";
 include "funciones.php";
 
+// Establecer el juego de caracteres a utf8mb4
+mysqli_set_charset($conn, "utf8mb4");
+
 // Verificar si el usuario ha iniciado sesión y si es administrador (rol = 1)
 if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] != 1) {
     header("Location: dashboard.php"); // Redirigir si no es admin
@@ -49,7 +52,7 @@ $resultado = mysqli_query($conn, $sql);
                         <td>
                             <a href="admin_cambiar_password.php?id=<?= $usuario["id"] ?>" class="btn btn-warning btn-sm">Cambiar Contraseña</a>
 
-                            <?php if ($usuario["rol"] != 1 && $usuario["id"] != $_SESSION["user_id"]): ?> 
+                            <?php if ($usuario["id"] != $_SESSION["user_id"]) ?> 
                                 <a href="admin_eliminar_usuario.php?id=<?= $usuario["id"] ?>" class="btn btn-danger btn-sm" 
                                     onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
                              <?php endif; ?>
