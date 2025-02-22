@@ -7,10 +7,10 @@ ini_set('date.timezone', 'Europe/Madrid');
 date_default_timezone_set('Europe/Madrid');
 
 // Conexión a la base de datos
-$servername = "*********";
-$username = "*********";
-$password = "*********";
-$database = "*********";
+$servername = "*******";
+$username = "*******";
+$password = "*******";
+$database = "*******";
 $enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
