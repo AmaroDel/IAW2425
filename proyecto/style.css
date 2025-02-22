@@ -1,17 +1,11 @@
-/* Modo claro (por defecto) */
+/* Modo claro por defecto */
 body {
     background: #ffffff;
     color: #000000;
     transition: background 0.3s, color 0.3s;
 }
 
-/* Modo oscuro */
-body.dark-mode {
-    background: #121212;
-    color: #ffffff;
-}
-
-/* Estilos del switch */
+/* Estilos del interruptor */
 .switch {
     position: fixed;
     top: 10px;

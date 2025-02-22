@@ -126,6 +126,17 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     se conectó por última vez el <?php echo $fecha_conexion; ?> 
     con la IP: <?php echo $ip_usuario; ?>.
 </h1>
+
+<!-- Interruptor de modo oscuro -->
+<label class="switch">
+    <input type="checkbox" id="flexSwitchCheckChecked">
+    <span class="slider round"></span>
+</label>
+
+<script src="modo.js"></script>
+
+<script src="modo.js"></script>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
