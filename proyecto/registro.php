@@ -14,7 +14,7 @@ if (!$enlace) {
 // Habilitar la visualización de errores en PHP
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 
 // Establecer el juego de caracteres de la conexión a la base de datos
 mysqli_set_charset($enlace, "utf8mb4");
