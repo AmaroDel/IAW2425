@@ -2,6 +2,11 @@
 // Iniciar la sesión
 session_start();
 
+// Habilitar la visualización de errores en PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION["user_id"])) {
     // Redirigir al usuario a la página de inicio de sesión si no está autenticado

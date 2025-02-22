@@ -2,6 +2,11 @@
 // Iniciar la sesión
 session_start();
 
+// Habilitar la visualización de errores en PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Incluir archivos de configuración y funciones
 include "config.php";
 include "funciones.php";

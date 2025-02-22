@@ -2,6 +2,11 @@
 // Iniciar sesión antes que cualquier otra cosa
 session_start();
 
+// Habilitar la visualización de errores en PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Establecer la zona horaria a Madrid, España
 ini_set('date.timezone', 'Europe/Madrid');
 date_default_timezone_set('Europe/Madrid');
