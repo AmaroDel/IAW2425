@@ -52,7 +52,7 @@ $resultado = mysqli_query($conn, $sql);
                         <td>
                             <a href="admin_cambiar_password.php?id=<?= $usuario["id"] ?>" class="btn btn-warning btn-sm">Cambiar Contraseña</a>
 
-                            <?php if ($usuario["id"] != $_SESSION["user_id"]) ?> 
+                            <?php if ($usuario["id"] != $_SESSION["user_id"]): ?> 
                                 <a href="admin_eliminar_usuario.php?id=<?= $usuario["id"] ?>" class="btn btn-danger btn-sm" 
                                     onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
                              <?php endif; ?>
