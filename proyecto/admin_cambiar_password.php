@@ -58,11 +58,23 @@ $id_usuario = $_GET["id"] ?? null;
 <body>
     <div class="container mt-4">
         <h2>Cambiar Contraseña</h2>
+
+        <!-- Mostrar un mensaje de error si las contraseñas no coinciden -->
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger">
+                <?= $error ?>
+            </div>
+        <?php endif; ?>
+
         <form method="POST" action="admin_cambiar_password.php">
             <input type="hidden" name="id" value="<?php echo escapar($id_usuario) ?>">
             <div class="mb-3">
                 <label for="password" class="form-label">Nueva Contraseña:</label>
                 <input type="password" class="form-control" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Repite la Nueva Contraseña:</label>
+                <input type="password" class="form-control" name="password2" required>
             </div>
             <button type="submit" class="btn btn-primary">Actualizar</button>
             <a href="admin_usuarios.php" class="btn btn-secondary">Cancelar</a>
@@ -70,3 +82,7 @@ $id_usuario = $_GET["id"] ?? null;
     </div>
 </body>
 </html>
+
+<?php
+mysqli_close($conn);
+?>
