@@ -1,9 +1,9 @@
 <?php
 // Conexión a la base de datos
-$servername = "*********";
-$username = "*********";
-$password = "*********";
-$database = "*********";
+$servername = "*******";
+$username = "*******";
+$password = "*******";
+$database = "*******";
 $enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
