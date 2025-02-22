@@ -119,6 +119,7 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <title>Dashboard</title>
     <!-- Incluir Bootstrap 5 desde un CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body> 
@@ -126,17 +127,6 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     se conectó por última vez el <?php echo $fecha_conexion; ?> 
     con la IP: <?php echo $ip_usuario; ?>.
 </h1>
-
-<!-- Interruptor de modo oscuro -->
-<label class="switch">
-    <input type="checkbox" id="flexSwitchCheckChecked">
-    <span class="slider round"></span>
-</label>
-
-<script src="modo.js"></script>
-
-<script src="modo.js"></script>
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
@@ -176,8 +166,13 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <a href="estadisticas.php" class="btn btn-info">Ver Estadísticas</a>
     <!-- Enlace para descargar -->
     <a href="descargar.php"><button>Descargar</button></a>
-    <!-- Enlace para modo oscuro -->
-    <a href="oscuro.php" class="modo-oscuro-btn">Activar Modo Oscuro</a>
+
+    <!-- Enlace para activar/desactivar el modo oscuro -->
+    <a href="#" id="modo-oscuro" class="btn btn-secondary">Activar Modo Oscuro</a>
+
+    <!-- Incluir el archivo JavaScript común -->
+    <script src="modo.js"></script>
+
     <?php if ($usuario["rol"] == 1): ?>
     <!-- Enlace para administrar usuarios -->
     <a href="admin_usuarios.php" class="btn btn-warning me-2">Administrar Usuarios</a>

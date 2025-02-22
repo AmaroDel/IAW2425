@@ -118,6 +118,8 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
     <title>Crear Actividad</title>
     <!-- Agregar el CDN de Bootstrap -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body class="container">
     <div class="mt-5">
@@ -229,6 +231,7 @@ $result_tipos = mysqli_query($conn, $sql_tipos);
             <button type="submit" name="submit" class="btn btn-primary">Crear Actividad</button>
         </form>
     </div>
+    <script src="modo.js"></script>
 
     <!-- Agregar los scripts de Bootstrap y jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

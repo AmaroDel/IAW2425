@@ -241,6 +241,8 @@ if (!ctype_digit($total_alumnos) || intval($total_alumnos) <= 0) {
 <head>
     <meta charset="UTF-8">
     <title>Actualizar Actividad</title>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
     <div>
@@ -405,5 +407,7 @@ if (!ctype_digit($total_alumnos) || intval($total_alumnos) <= 0) {
             </form>
         <?php endif; ?>
     </div>
+    <script src="modo.js"></script>
+
 </body>
 </html>

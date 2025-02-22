@@ -37,6 +37,8 @@ $result = mysqli_query($conn, $sql);
     <title>Estadísticas de Actividades</title>
     <!-- Incluir Bootstrap para diseño responsivo y mejor apariencia -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
 </head>
 <body class="container mt-5">
     <h2 class="mb-4">Estadísticas de Actividades</h2>
@@ -71,6 +73,8 @@ $result = mysqli_query($conn, $sql);
 
     <!-- Botón para regresar a la pantalla de gestión de actividades -->
     <a href="dashboard.php" class="btn btn-secondary">Volver a Gestión de Actividades</a>
+
+    <script src="modo.js"></script>
 
     <!-- Incluir jQuery y Bootstrap para funcionalidades adicionales -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
