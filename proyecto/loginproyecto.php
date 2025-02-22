@@ -6,16 +6,19 @@ session_start();
 ini_set('date.timezone', 'Europe/Madrid');
 date_default_timezone_set('Europe/Madrid');
 
-// Incluir archivos de configuración y funciones
-include "config.php";
-include "funciones.php";
+// Conexión a la base de datos
+$servername = "*********";
+$username = "*********";
+$password = "*********";
+$database = "*********";
+$enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
-if (!$conn) {
+if (!$enlace) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
-mysqli_set_charset($conn, "utf8mb4");
+mysqli_set_charset($enlace, "utf8mb4");
 
 // Procesar formulario al enviarlo
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -27,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = htmlspecialchars(trim($_POST["password"]));
 
     $query = "SELECT * FROM registrados WHERE email=?";
-    $stmt = mysqli_prepare($conn, $query);
+    $stmt = mysqli_prepare($enlace, $query);
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     $resultado = mysqli_stmt_get_result($stmt);
@@ -45,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Actualizar la última conexión a la fecha y hora actual
             $sql_update = "UPDATE registrados SET ultima_conexion = NOW() WHERE id = ?";
-            $stmt_update = mysqli_prepare($conn, $sql_update);
+            $stmt_update = mysqli_prepare($enlace, $sql_update);
             mysqli_stmt_bind_param($stmt_update, "i", $usuario["id"]);
             mysqli_stmt_execute($stmt_update);
             mysqli_stmt_close($stmt_update);
@@ -69,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     mysqli_stmt_close($stmt);
 }
 
-mysqli_close($conn);
+mysqli_close($enlace);
 ?>
 
 <!-- Formulario de inicio de sesión -->

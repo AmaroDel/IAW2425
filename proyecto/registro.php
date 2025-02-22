@@ -1,19 +1,22 @@
 <?php
-// Incluir archivos de configuración y funciones
-include "config.php";
-include "funciones.php";
+// Conexión a la base de datos
+$servername = "*********";
+$username = "*********";
+$password = "*********";
+$database = "*********";
+$enlace = mysqli_connect($servername, $username, $password, $database);
 
 // Verificar conexión
-if (!$conn) {
+if (!$enlace) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
 // Establecer el juego de caracteres de la conexión a la base de datos
-mysqli_set_charset($conn, "utf8mb4");
+mysqli_set_charset($enlace, "utf8mb4");
 
 // Obtener datos para los selects del formulario
 $sql_departamentos = "SELECT id, nombre FROM departamentos";
-$result_departamentos = mysqli_query($conn, $sql_departamentos);
+$result_departamentos = mysqli_query($enlace, $sql_departamentos);
 
 // Verificar si la consulta fue exitosa
 if (!$result_departamentos) {
@@ -53,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         // Verificar si el usuario ya existe
         $query = "SELECT id FROM registrados WHERE email='$email'";
-        $resultado = mysqli_query($conn, $query);
+        $resultado = mysqli_query($enlace, $query);
 
         if (mysqli_num_rows($resultado) > 0) {
             $error = "Error, el usuario ya está registrado.</p>";
@@ -69,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $query = "INSERT INTO registrados (nombre, apellidos, email, password, departamento) 
         VALUES ('$nombre', '$apellidos', '$email', '$password_encrypted', '$departamento')";
 
-            if (mysqli_query($conn, $query)) {
+            if (mysqli_query($enlace, $query)) {
                 // Enviar correo electrónico de confirmación
                 $asunto = "Registro exitoso";
                 $mensaje = "Hola $nombre,\n\nGracias por registrarte. Estos son tus datos:\nNombre: $nombre\nApellidos: $apellidos\nEmail: $email\n\nSaludos.";
@@ -81,13 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             } else {
                 $error =
-                    "Error al registrar el usuario: " . mysqli_error($conn);
+                    "Error al registrar el usuario: " . mysqli_error($enlace);
             }
         }
     }
 }
 
-mysqli_close($conn);
+mysqli_close($enlace);
 ?>
 
 
