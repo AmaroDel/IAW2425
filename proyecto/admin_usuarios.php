@@ -35,7 +35,6 @@ $resultado = mysqli_query($conn, $sql);
         <table class="table table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Rol</th>
@@ -45,7 +44,6 @@ $resultado = mysqli_query($conn, $sql);
             <tbody>
                 <?php while ($usuario = mysqli_fetch_assoc($resultado)): ?>
                     <tr>
-                        <td><?php echo escapar($usuario["id"]) ?></td>
                         <td><?php echo escapar($usuario["nombre"]) ?></td>
                         <td><?php echo escapar($usuario["email"]) ?></td>
                         <td><?= $usuario["rol"] == 1 ? "Administrador" : "Usuario" ?></td>
