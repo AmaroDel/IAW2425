@@ -29,8 +29,8 @@ if ($id_usuario == $_SESSION["user_id"]) {
 }
 
 
-// Primero, eliminar todas las actividades organizadas por el usuario
-$sql_actividades = "DELETE FROM actividades WHERE profesor_responsable = ?";
+// Primero, eliminar todas las actividades creadas por el usuario
+$sql_actividades = "DELETE FROM actividades WHERE creador = ?";
 $stmt_actividades = mysqli_prepare($conn, $sql_actividades);
 mysqli_stmt_bind_param($stmt_actividades, "i", $id_usuario);
 mysqli_stmt_execute($stmt_actividades);

@@ -49,9 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $objetivo = mysqli_real_escape_string($conn, $_POST["objetivo"]);
     $acompanantes = mysqli_real_escape_string($conn, $_POST["acompanantes"]); // Nuevo campo
 
+    // Obtener el ID del usuario autenticado
+    $creador = $_SESSION["user_id"];
+
     // Consulta SQL para insertar los datos en la base de datos
-    $sql = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, ubicacion, coste, total_alumnos, objetivo, acompanantes)
-            VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$ubicacion', '$coste', '$total_alumnos', '$objetivo', '$acompanantes')";
+    $sql = "INSERT INTO actividades (titulo, tipo, departamento, profesor_responsable, trimestre, fecha_inicio, hora_inicio, fecha_fin, hora_fin, organizador, ubicacion, coste, total_alumnos, objetivo, acompanantes, creador)
+        VALUES ('$titulo', '$tipo', '$departamento', '$profesor_responsable', '$trimestre', '$fecha_inicio', '$hora_inicio', '$fecha_fin', '$hora_fin', '$organizador', '$ubicacion', '$coste', '$total_alumnos', '$objetivo', '$acompanantes', '$creador')";
 
     $error = "";
 
