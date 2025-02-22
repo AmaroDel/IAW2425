@@ -16,6 +16,12 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
+// Verificar si el usuario es administrador
+if ($_SESSION["rol"] != 1) {
+    header("Location: dashboard.php");
+    exit();
+}
+
 // Incluir la configuración de la base de datos y funciones auxiliares.
 include "config.php";
 include "funciones.php";
@@ -45,16 +51,25 @@ if ($usuario["rol"] == 1) {
         exit();
     }
 
-    // **ELIMINAR DEPARTAMENTO**
+    // **ELIMINAR DEPARTAMENTO Y SUS ACTIVIDADES**
     if (isset($_GET["eliminar"])) {
-        $id = (int)$_GET["eliminar"]; // Convertir ID a entero para mayor seguridad.
-        $stmt = mysqli_prepare($conn, "DELETE FROM departamentos WHERE id = ?");
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-        $_SESSION['mensaje'] = "Departamento eliminado correctamente.";
-        header("Location: gestion_departamentos.php");
-        exit();
+    $id = (int)$_GET["eliminar"]; // Convertir ID a entero para mayor seguridad.
+
+    // Primero, eliminar las actividades asociadas a este departamento.
+    $stmt = mysqli_prepare($conn, "DELETE FROM actividades WHERE departamento = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    // Luego, eliminar el departamento.
+    $stmt = mysqli_prepare($conn, "DELETE FROM departamentos WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    $_SESSION['mensaje'] = "Departamento y sus actividades eliminados correctamente.";
+    header("Location: gestion_departamentos.php");
+    exit();
     }
 
     // **EDITAR DEPARTAMENTO**
@@ -62,20 +77,10 @@ if ($usuario["rol"] == 1) {
         $id = (int)$_POST["editar_id"]; // Convertir ID a entero.
         $nombre = trim($_POST["editar_nombre"]);
         if (!empty($nombre)) {
-        // Preparar la consulta SQL para actualizar el departamento con un nuevo nombre
-        $stmt = mysqli_prepare($conn, "UPDATE departamentos SET nombre = ? WHERE id = ?");
-
-        // Asignar los valores a los marcadores ? de la consulta:
-        // "si" significa: 
-        // - "s" → String (nombre del departamento)
-        // - "i" → Integer (ID del departamento)
-        mysqli_stmt_bind_param($stmt, "si", $nombre, $id);
-
-        // Ejecutar la consulta SQL con los valores asignados
-        mysqli_stmt_execute($stmt);
-
-        // Cerrar el statement para liberar memoria
-        mysqli_stmt_close($stmt);
+            $stmt = mysqli_prepare($conn, "UPDATE departamentos SET nombre = ? WHERE id = ?");
+            mysqli_stmt_bind_param($stmt, "si", $nombre, $id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
             $_SESSION['mensaje'] = "Departamento actualizado con éxito.";
         } else {
             $_SESSION['error'] = "El nombre no puede estar vacío.";
