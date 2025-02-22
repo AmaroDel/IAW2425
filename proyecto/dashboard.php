@@ -21,6 +21,18 @@ mysqli_set_charset($conn, "utf8mb4");
 // Obtener información del usuario
 $usuario = $_SESSION;
 
+// Obtener la última conexión desde la sesión (en lugar de hacer otra consulta SQL)
+$ultima_conexion = $_SESSION["ultima_conexion"] ?? null;
+
+// Configurar el locale en español
+setlocale(LC_TIME, 'es_ES.UTF-8');
+
+// Formatear la fecha y hora de la última conexión
+$fecha_conexion = $ultima_conexion ? strftime("%d de %B a las %H:%M", strtotime($ultima_conexion)) : "No disponible";
+
+// Mostrar mensaje con la IP del usuario
+$ip_usuario = $_SERVER['REMOTE_ADDR'];
+
 // Recuperar la hora de la última conexión
 $user_id = $_SESSION["user_id"];
 $query = "SELECT ultima_conexion FROM registrados WHERE id = ?";
@@ -29,8 +41,6 @@ mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $user_data = mysqli_fetch_assoc($result);
-
-$ultima_conexion = $user_data['ultima_conexion'];
 
 mysqli_stmt_close($stmt);
 
@@ -121,7 +131,10 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
 
 </head>
 <body class="<?php echo isset($_SESSION['modo_oscuro']) && $_SESSION['modo_oscuro'] ? 'modo-oscuro' : ''; ?>">
-<h1>Bienvenido, <?php echo escapar($_SESSION["username"]); ?>, se conectó por última vez el <?php echo $fecha_conexion; ?> con la IP: <?php echo $_SERVER['REMOTE_ADDR']; ?>.</h1>
+<h1>Bienvenido, <?php echo escapar($_SESSION["username"]); ?>, 
+    se conectó por última vez el <?php echo $fecha_conexion; ?> 
+    con la IP: <?php echo $ip_usuario; ?>.
+</h1>
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
