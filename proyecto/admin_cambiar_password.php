@@ -14,21 +14,33 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["rol"] != 1) {
     exit();
 }
 
+// Inicializar una variable de error
+$error = "";
+
 // Si el formulario ha sido enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = $_POST["id"];
-    $nueva_password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+    $password = $_POST["password"];
+    $password2 = $_POST["password2"];
 
-    // Actualizar la contraseña en la base de datos
-    $sql = "UPDATE registrados SET password = ? WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "si", $nueva_password, $id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    // Comprobar que las dos contraseñas son iguales
+    if ($password !== $password2) {
+        $error = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
+    } else {
+        // Si coinciden, hashear la nueva contraseña
+        $nueva_password = password_hash($password, PASSWORD_BCRYPT);
 
-    // Redirigir de vuelta al panel de usuarios con un mensaje
-    header("Location: admin_usuarios.php?mensaje=contraseña_cambiada");
-    exit();
+        // Actualizar la contraseña en la base de datos
+        $sql = "UPDATE registrados SET password = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "si", $nueva_password, $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        // Redirigir de vuelta al panel de usuarios con un mensaje
+        header("Location: admin_usuarios.php?mensaje=contraseña_cambiada");
+        exit();
+    }
 }
 
 // Obtener el ID del usuario desde la URL
