@@ -180,6 +180,11 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <!-- Enlace para administrar usuarios -->
     <a href="admin_usuarios.php" class="btn btn-warning me-2">Administrar Usuarios</a>
     <?php endif; ?>
+    <?php if ($usuario["rol"] == 1): ?>
+    <!-- Enlace para gestionar departamentos (solo visible para administradores) -->
+    <a href="gestion_departamentos.php" class="btn btn-secondary me-2">Gestionar Departamentos</a>
+    <?php endif; ?>
+
 
 </div>
 
