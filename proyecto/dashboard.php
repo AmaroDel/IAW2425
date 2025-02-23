@@ -7,9 +7,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 
-// Establecer la zona horaria a Madrid, España
-date_default_timezone_set('Europe/Madrid');
-
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION["user_id"])) {
     header("Location: loginproyecto.php");
@@ -29,8 +26,6 @@ $usuario = $_SESSION;
 // Obtener la última conexión desde la sesión (en lugar de hacer otra consulta SQL)
 $ultima_conexion = $_SESSION["ultima_conexion"] ?? null;
 
-// Configurar el locale en español
-setlocale(LC_TIME, 'es_ES.UTF-8');
 
 // Formatear la fecha y hora de la última conexión
 $fecha_conexion = $ultima_conexion ? strftime("%d de %B a las %H:%M", strtotime($ultima_conexion)) : "No disponible";
