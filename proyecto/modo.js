@@ -1,28 +1,29 @@
-// Verificar si el modo oscuro está activado en localStorage
-if (localStorage.getItem('modoOscuro') === 'true') {
-    document.body.classList.add('modo-oscuro');
-}
+document.addEventListener("DOMContentLoaded", function () {
+    const botonModoOscuro = document.getElementById("modo-oscuro");
+    const modoOscuroActivado = localStorage.getItem("modoOscuro") === "true";
 
-// Alternar el modo oscuro cuando el usuario haga clic en el botón o enlace
-document.getElementById('modo-oscuro').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevenir la acción por defecto del enlace
-
-    // Alternar la clase 'modo-oscuro' en el body
-    document.body.classList.toggle('modo-oscuro');
-
-    // Guardar o eliminar la preferencia de modo oscuro en localStorage
-    if (document.body.classList.contains('modo-oscuro')) {
-        localStorage.setItem('modoOscuro', 'true');
-        this.textContent = "Desactivar Modo Oscuro"; // Cambiar el texto del botón
+    // Aplicar el modo oscuro si está activado en localStorage
+    if (modoOscuroActivado) {
+        document.body.classList.add("modo-oscuro");
+        botonModoOscuro.textContent = "Desactivar Modo Oscuro";
     } else {
-        localStorage.setItem('modoOscuro', 'false');
-        this.textContent = "Activar Modo Oscuro";
+        botonModoOscuro.textContent = "Activar Modo Oscuro";
     }
+
+    // Alternar el modo oscuro cuando se haga clic en el botón
+    botonModoOscuro.addEventListener("click", function (e) {
+        e.preventDefault(); // Evitar la acción por defecto del enlace
+
+        document.body.classList.toggle("modo-oscuro"); // Alternar la clase en el body
+        const nuevoEstado = document.body.classList.contains("modo-oscuro");
+
+        // Guardar el estado en localStorage
+        localStorage.setItem("modoOscuro", nuevoEstado);
+
+        // Actualizar el texto del botón
+        botonModoOscuro.textContent = nuevoEstado
+            ? "Desactivar Modo Oscuro"
+            : "Activar Modo Oscuro";
+    });
 });
 
-// Al cargar la página, ajustar el texto del enlace según el estado
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.body.classList.contains('modo-oscuro')) {
-        document.getElementById('modo-oscuro').textContent = "Desactivar Modo Oscuro";
-    }
-});
