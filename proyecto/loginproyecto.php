@@ -115,6 +115,9 @@ mysqli_close($enlace);
                         <p class="mt-3 text-center">
                             <a href="registro.php">¿No estás registrado?</a>
                         </p>
+                        <p class="mt-2 text-center">
+                            <a href="recuperar.php" class="text-decoration-none">¿Has olvidado tu contraseña?</a>
+                        </p>
                     </div>
                 </div>
             </div>
