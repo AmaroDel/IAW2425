@@ -7,6 +7,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 
+// Establecer la zona horaria a Madrid, España
+date_default_timezone_set('Europe/Madrid');
+
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION["user_id"])) {
     header("Location: loginproyecto.php");
@@ -22,12 +25,21 @@ mysqli_set_charset($conn, "utf8mb4");
 
 // Obtener información del usuario
 $usuario = $_SESSION;
+
+// Obtener la última conexión desde la sesión (en lugar de hacer otra consulta SQL)
+$ultima_conexion = $_SESSION["ultima_conexion"] ?? null;
+
+// Configurar el locale en español
+setlocale(LC_TIME, 'es_ES.UTF-8');
+
+// Formatear la fecha y hora de la última conexión
+$fecha_conexion = $ultima_conexion ? strftime("%d de %B a las %H:%M", strtotime($ultima_conexion)) : "No disponible";
+
+// Mostrar mensaje con la IP del usuario
+$ip_usuario = $_SERVER['REMOTE_ADDR'];
+
+// Recuperar la hora de la última conexión
 $user_id = $_SESSION["user_id"];
-
-// Configurar el timezone a Madrid
-date_default_timezone_set('Europe/Madrid');
-
-// Obtener la última conexión desde la base de datos
 $query = "SELECT ultima_conexion FROM registrados WHERE id = ?";
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "i", $user_id);
@@ -35,13 +47,13 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $user_data = mysqli_fetch_assoc($result);
 
-$ultima_conexion = $user_data["ultima_conexion"] ?? null;
-$fecha_conexion = $ultima_conexion ? date("d \d\e F \a \l\a\s H:i", strtotime($ultima_conexion)) : "No disponible";
-
-// Mostrar mensaje con la IP del usuario
-$ip_usuario = $_SERVER['REMOTE_ADDR'];
-
 mysqli_stmt_close($stmt);
+
+// Configurar el locale en español
+setlocale(LC_TIME, 'es_ES.UTF-8');
+
+// Formatear la fecha y hora de la última conexión
+$fecha_conexion = strftime("%d de %B a las %H:%M", strtotime($ultima_conexion));
 
 // Lista blanca de columnas permitidas
 $columnas_permitidas = ["id", "titulo", "tipo_nombre", "departamento_nombre", "profesor_nombre",
