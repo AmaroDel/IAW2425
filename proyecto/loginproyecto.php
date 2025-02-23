@@ -47,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Guardamos la última conexión antes de actualizarla
             $_SESSION["ultima_conexion"] = $usuario["ultima_conexion"];
             
-
             // Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
             date_default_timezone_set('Europe/Madrid');
             $date = date('d-m-Y H:i:s');
