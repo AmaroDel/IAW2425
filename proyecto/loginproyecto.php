@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $date = date('d-m-Y H:i:s');
 
             // Actualizar la última conexión a la fecha y hora actual
+            mysqli_query($enlace, "SET time_zone = 'Europe/Madrid'");
             $sql_update = "UPDATE registrados SET ultima_conexion = NOW() WHERE id = ?";
             $stmt_update = mysqli_prepare($enlace, $sql_update);
             mysqli_stmt_bind_param($stmt_update, "i", $usuario["id"]);
