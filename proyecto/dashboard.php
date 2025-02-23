@@ -38,17 +38,6 @@ $fecha_conexion = $ultima_conexion ? strftime("%d de %B a las %H:%M", strtotime(
 // Mostrar mensaje con la IP del usuario
 $ip_usuario = $_SERVER['REMOTE_ADDR'];
 
-// Recuperar la hora de la última conexión
-$user_id = $_SESSION["user_id"];
-$query = "SELECT ultima_conexion FROM registrados WHERE id = ?";
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $user_id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$user_data = mysqli_fetch_assoc($result);
-
-mysqli_stmt_close($stmt);
-
 // Configurar el locale en español
 setlocale(LC_TIME, 'es_ES.UTF-8');
 
