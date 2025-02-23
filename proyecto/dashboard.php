@@ -23,6 +23,9 @@ mysqli_set_charset($conn, "utf8mb4");
 // Obtener información del usuario
 $usuario = $_SESSION;
 
+// Obtener la última conexión desde la sesión (en lugar de hacer otra consulta SQL)
+$ultima_conexion = $_SESSION["ultima_conexion"] ?? null;
+
 // Formatear la fecha y hora de la última conexión
 $fecha_conexion = $ultima_conexion ? strftime("%d de %B a las %H:%M", strtotime($ultima_conexion)) : "No disponible";
 
