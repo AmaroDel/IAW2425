@@ -7,10 +7,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 
-// Establecer la zona horaria a Madrid, España
-ini_set('date.timezone', 'Europe/Madrid');
-date_default_timezone_set('Europe/Madrid');
-
 // Conexión a la base de datos
 $servername = "*******";
 $username = "*******";
