@@ -73,9 +73,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 '$6$rounds=5000$' . uniqid(mt_rand(), true) . '$'
             );
 
-            // Insertar datos en la base de datos
-            $query = "INSERT INTO registrados (nombre, apellidos, email, password, departamento) 
-        VALUES ('$nombre', '$apellidos', '$email', '$password_encrypted', '$departamento')";
+            // Insertar datos en la base de datos con rol 0
+            $query = "INSERT INTO registrados (nombre, apellidos, email, password, departamento, rol) 
+                 VALUES ('$nombre', '$apellidos', '$email', '$password_encrypted', '$departamento', 0)";
 
             if (mysqli_query($enlace, $query)) {
                 // Enviar correo electrónico de confirmación
@@ -88,8 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     echo "<p style='color: orange;'>Usuario registrado, pero no se pudo enviar el correo.</p>";
                 }
             } else {
-                $error =
-                    "Error al registrar el usuario: " . mysqli_error($enlace);
+                $error = "Error al registrar el usuario: " . mysqli_error($enlace);
             }
         }
     }
