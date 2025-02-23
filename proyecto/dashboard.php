@@ -162,6 +162,9 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <!-- Incluir el archivo JavaScript común -->
     <script src="modo.js"></script>
 
+    <!-- Enlace para descargar las actividades -->
+    <a href="descargar_act.php" class="btn btn-success">Descargar Actividades (TXT)</a>
+
     <?php if ($usuario["rol"] == 1): ?>
     <!-- Enlace para administrar usuarios -->
     <a href="admin_usuarios.php" class="btn btn-warning me-2">Administrar Usuarios</a>
