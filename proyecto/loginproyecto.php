@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
 
             // Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
+            date_default_timezone_set('Europe/Madrid');
             $date = date('d-m-Y H:i:s');
 
             // Actualizar la última conexión a la fecha y hora actual
