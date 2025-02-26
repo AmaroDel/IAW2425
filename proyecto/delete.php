@@ -34,8 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id = mysqli_real_escape_string($conn, $_POST["id"]);
     $sql = "DELETE FROM actividades WHERE id=$id";
+    $titulo = mysqli_real_escape_string($conn, $_GET["titulo"]);
+
+
+    // Obtenemos la fecha y hora actual en formato Día-Mes-Año Hora:Minutos:Segundos
+    date_default_timezone_set('Europe/Madrid');
+    $date = date('d-m-Y H:i:s');
 
     if (mysqli_query($conn, $sql)) {
+        // Formateamos el registro que se guardará en el archivo
+        //Jose Luís eliminó la actividad X a las Y horas
+        $logEntry = (($_SESSION["username"])) . " eliminó la actividad $titulo a las $date";
+        // Escribimos el registro en el archivo logs.txt
+        file_put_contents('eliminadas.txt', $logEntry, FILE_APPEND);
         header("Location: dashboard.php");
         exit();
     } else {

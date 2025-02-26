@@ -109,6 +109,11 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <!-- Incluir Bootstrap 5 desde un CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        #modo-oscuro {
+            text-align: left;
+        }
+    </style>
 
 </head>
 <body> 
@@ -116,34 +121,6 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     se conectó por última vez el <?php echo $fecha_conexion; ?> 
     con la IP: <?php echo $ip_usuario; ?>.
 </h1>
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Actividades</h5>
-                    <p class="card-text"><?= $stats['total'] ?></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Aprobadas</h5>
-                    <p class="card-text"><?= $stats['aprobadas'] ?></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Pendientes</h5>
-                    <p class="card-text"><?= $stats['pendientes'] ?></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <h2>Dashboard de Actividades</h2>
 <div>
@@ -155,13 +132,7 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
     <a href="estadisticas.php" class="btn btn-info">Ver Estadísticas</a>
     <!-- Enlace para descargar -->
     <a href="descargar.php"><button>Descargar</button></a>
-
-    <!-- Enlace para activar/desactivar el modo oscuro -->
-    <a href="#" id="modo-oscuro" class="btn btn-secondary">Activar Modo Oscuro</a>
-
-    <!-- Incluir el archivo JavaScript común -->
-    <script src="modo.js"></script>
-
+    
     <!-- Enlace para descargar las actividades -->
     <a href="descargar_act.php" class="btn btn-success">Descargar Actividades (TXT)</a>
 
@@ -247,6 +218,40 @@ $paginas = ceil($total / $por_pagina); // Calcular total de páginas
 
 <!-- Incluir el script de Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Actividades</h5>
+                    <p class="card-text"><?= $stats['total'] ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Aprobadas</h5>
+                    <p class="card-text"><?= $stats['aprobadas'] ?></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Pendientes</h5>
+                    <p class="card-text"><?= $stats['pendientes'] ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Enlace para activar/desactivar el modo oscuro -->
+    <a href="#" id="modo-oscuro" class="btn btn-secondary">Activar Modo Oscuro</a>
+
+    <!-- Incluir el archivo JavaScript común -->
+    <script src="modo.js"></script>
+
 </body>
 </html>
 
